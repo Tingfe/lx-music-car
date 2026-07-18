@@ -16,6 +16,7 @@ import { Icon } from '@/components/common/Icon'
 import { useTheme } from '@/store/theme/hook'
 import { setTheme } from '@/core/theme'
 import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 const headerComponents: Partial<Record<CommonState['navActiveId'], React.ReactNode>> = {
   nav_search: <SearchTypeSelector />,
@@ -25,6 +26,7 @@ const HEADER_HEIGHT = isCarEdition ? 72 : _HEADER_HEIGHT * 0.8
 
 const ThemeToggle = () => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const lightThemeId = useSettingValue('theme.lightId')
   const darkThemeId = useSettingValue('theme.darkId')
 
@@ -33,8 +35,8 @@ const ThemeToggle = () => {
       style={styles.themeToggle}
       activeOpacity={0.6}
       onPress={() => { setTheme(theme.isDark ? lightThemeId : darkThemeId) }}>
-      <Icon name="setting" size={isCarEdition ? 26 : 18} color={theme['c-font']} />
-      <Text size={isCarEdition ? 16 : 13} color={theme['c-font']}>{theme.isDark ? '日间' : '夜间'}</Text>
+      <Icon name="setting" size={isCarEdition ? 26 : 18} color={isCarEdition ? carTheme.accent : theme['c-font']} />
+      <Text size={isCarEdition ? 16 : 13} color={isCarEdition ? carTheme.text : theme['c-font']}>{theme.isDark ? '深色' : '浅色'}</Text>
     </TouchableOpacity>
   )
 }
@@ -50,18 +52,22 @@ const LeftHeader = () => {
   const id = useNavActiveId()
   const t = useI18n()
   const statusBarHeight = useStatusbarHeight()
+  const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   return (
     <View style={{
       ...styles.container,
+      backgroundColor: isCarEdition ? carTheme.surface : undefined,
+      borderBottomColor: isCarEdition ? carTheme.border : undefined,
       height: scaleSizeH(HEADER_HEIGHT) + statusBarHeight,
       paddingTop: statusBarHeight,
     }}>
       <View style={styles.left}>
-        <Text style={styles.leftTitle} size={isCarEdition ? 24 : 18}>{t(id)}</Text>
+        <Text style={styles.leftTitle} size={isCarEdition ? 24 : 18} color={isCarEdition ? carTheme.text : undefined}>{t(id)}</Text>
       </View>
       {headerComponents[id] ?? null}
-      {isCarEdition ? <DriveBadge /> : <ThemeToggle />}
+      <ThemeToggle />
 
       {/* <TouchableOpacity style={styles.btn} onPress={openSetting}>
         <Icon style={{ ...styles.btnText, color: theme['c-font'] }} name="setting" size={styles.btnText.fontSize} />
@@ -81,30 +87,25 @@ const RightHeader = () => {
   const t = useI18n()
   const id = useNavActiveId()
   const statusBarHeight = useStatusbarHeight()
+  const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   return (
     <View style={{
       ...styles.container,
+      backgroundColor: isCarEdition ? carTheme.surface : undefined,
+      borderBottomColor: isCarEdition ? carTheme.border : undefined,
       height: scaleSizeH(HEADER_HEIGHT) + statusBarHeight,
       paddingTop: statusBarHeight,
     }}>
       <View style={styles.left}>
-        <Text style={styles.rightTitle} size={isCarEdition ? 24 : 18}>{t(id)}</Text>
+        <Text style={styles.rightTitle} size={isCarEdition ? 24 : 18} color={isCarEdition ? carTheme.text : undefined}>{t(id)}</Text>
       </View>
       {headerComponents[id] ?? null}
-      {isCarEdition ? <DriveBadge /> : <ThemeToggle />}
+      <ThemeToggle />
       {/* <TouchableOpacity style={styles.btn} onPress={openSetting}>
         <Icon style={{ ...styles.btnText, color: theme['c-font'] }} name="setting" size={styles.btnText.fontSize} />
       </TouchableOpacity> */}
-    </View>
-  )
-}
-
-const DriveBadge = () => {
-  return (
-    <View style={styles.driveBadge}>
-      <Icon name="logo" size={22} color="#35D7C2" />
-      <Text size={14} color="#B8C7D5">LX DRIVE</Text>
     </View>
   )
 }
@@ -135,9 +136,7 @@ const styles = createStyle({
     alignItems: 'center',
     // backgroundColor: 'rgba(0,0,0,0.1)',
     zIndex: 10,
-    backgroundColor: isCarEdition ? '#101923' : undefined,
     borderBottomWidth: isCarEdition ? 1 : 0,
-    borderBottomColor: isCarEdition ? '#253443' : undefined,
   },
   left: {
     flex: 1,
@@ -177,15 +176,6 @@ const styles = createStyle({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
-  },
-  driveBadge: {
-    minWidth: 132,
-    height: '100%',
-    paddingHorizontal: 18,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
   },
 })
 

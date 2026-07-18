@@ -11,20 +11,22 @@ import { createStyle } from '@/utils/tools'
 import { useTheme } from '@/store/theme/hook'
 import { useSettingValue } from '@/store/setting/hook'
 import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 
 export default memo(({ isHome = false }: { isHome?: boolean }) => {
   // const { onLayout, ...layout } = useLayout()
   const { keyboardShown } = useKeyboard()
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const autoHidePlayBar = useSettingValue('common.autoHidePlayBar')
 
   const playerComponent = useMemo(() => (
     <View style={{
       ...styles.container,
       minHeight: isCarEdition ? 112 : undefined,
-      backgroundColor: isCarEdition ? '#101B25' : theme['c-content-background'],
-      borderTopColor: isCarEdition ? '#263848' : 'transparent',
+      backgroundColor: isCarEdition ? carTheme.surface : theme['c-content-background'],
+      borderTopColor: isCarEdition ? carTheme.border : 'transparent',
     }}>
       <Pic isHome={isHome} />
       <View style={styles.center}>
@@ -38,7 +40,7 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
         <ControlBtn />
       </View>
     </View>
-  ), [theme, isHome])
+  ), [theme, isHome, carTheme.surface, carTheme.border])
 
   // console.log('render pb')
 

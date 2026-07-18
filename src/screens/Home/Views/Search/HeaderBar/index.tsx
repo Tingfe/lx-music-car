@@ -14,6 +14,7 @@ import { useTheme } from '@/store/theme/hook'
 import { type Source as MusicSource } from '@/store/search/music/state'
 import { type Source as SonglistSource } from '@/store/search/songlist/state'
 import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 type Sources = Readonly<Array<MusicSource | SonglistSource>>
 type SourceSelectorProps = _SourceSelectorProps<Sources>
@@ -38,6 +39,7 @@ export default forwardRef<HeaderBarType, HeaderBarProps>(({ onSourceChange, onTi
   const sourceSelectorRef = useRef<SourceSelectorType>(null)
   const searchInputRef = useRef<SearchInputType>(null)
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   useImperativeHandle(ref, () => ({
     setSourceList(list, source) {
@@ -57,7 +59,7 @@ export default forwardRef<HeaderBarType, HeaderBarProps>(({ onSourceChange, onTi
       ...styles.searchBar,
       height: isCarEdition ? 64 : 38,
       paddingRight: isCarEdition ? 24 : 10,
-      borderBottomColor: isCarEdition ? '#263848' : theme['c-border-background'],
+      borderBottomColor: isCarEdition ? carTheme.border : theme['c-border-background'],
     }}>
       <View style={styles.selector}>
         <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} center fontSize={isCarEdition ? 18 : 15} />

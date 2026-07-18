@@ -13,6 +13,7 @@ import { useSettingValue } from '@/store/setting/hook'
 import Text from '@/components/common/Text'
 import { useI18n } from '@/lang'
 import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 const NAV_WIDTH = isCarEdition ? 172 : 68
 const MENU_HEIGHT = isCarEdition ? 88 : undefined
@@ -27,7 +28,6 @@ const styles = createStyle({
     borderRightWidth: BorderWidths.normal,
     paddingBottom: 10,
     width: NAV_WIDTH,
-    backgroundColor: isCarEdition ? '#0D161F' : undefined,
   },
   header: {
     paddingTop: isCarEdition ? 22 : 15,
@@ -76,11 +76,12 @@ const styles = createStyle({
 
 const Header = () => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const statusBarHeight = useStatusbarHeight()
   return (
     <View style={{ paddingTop: statusBarHeight }}>
       <View style={styles.header}>
-        <Icon name="logo" color={isCarEdition ? '#35D7C2' : theme['c-primary-dark-100-alpha-300']} size={isCarEdition ? 28 : 22} />
+        <Icon name="logo" color={isCarEdition ? carTheme.accent : theme['c-primary-dark-100-alpha-300']} size={isCarEdition ? 28 : 22} />
         {/* <Text style={styles.headerText} size={16} color={theme['c-primary-dark-100-alpha-300']}>LX Music</Text> */}
       </View>
     </View>
@@ -97,28 +98,30 @@ const MenuItem = ({ id, icon, onPress }: {
   const t = useI18n()
   const activeId = useNavActiveId()
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   const itemStyle = [styles.menuItem, isCarEdition ? styles.carMenuItem : null]
   const iconSize = isCarEdition ? 32 : 20
-  const activeBackground = isCarEdition ? { backgroundColor: '#18323A', borderLeftWidth: 4, borderLeftColor: '#35D7C2', paddingLeft: 24 } : null
+  const activeBackground = isCarEdition ? { backgroundColor: carTheme.active, borderLeftWidth: 4, borderLeftColor: carTheme.accent, paddingLeft: 24 } : null
 
   return activeId == id
     ? <View style={[itemStyle, activeBackground]}>
         <View style={styles.iconContent}>
-          <Icon name={icon} size={iconSize} color={isCarEdition ? '#35D7C2' : theme['c-primary-font-active']} />
+          <Icon name={icon} size={iconSize} color={isCarEdition ? carTheme.accent : theme['c-primary-font-active']} />
         </View>
-        {isCarEdition ? <Text style={styles.text} size={16} color="#EAF5F6">{t(id)}</Text> : null}
+        {isCarEdition ? <Text style={styles.text} size={16} color={carTheme.text}>{t(id)}</Text> : null}
       </View>
     : <TouchableOpacity style={itemStyle} onPress={() => { onPress(id) }}>
         <View style={styles.iconContent}>
-          <Icon name={icon} size={iconSize} color={isCarEdition ? '#91A3B2' : theme['c-font-label']} />
+          <Icon name={icon} size={iconSize} color={isCarEdition ? carTheme.iconMuted : theme['c-font-label']} />
         </View>
-        {isCarEdition ? <Text style={styles.text} size={16} color="#C3D0D9">{t(id)}</Text> : null}
+        {isCarEdition ? <Text style={styles.text} size={16} color={carTheme.textMuted}>{t(id)}</Text> : null}
       </TouchableOpacity>
 }
 
 export default memo(() => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   // console.log('render drawer nav')
   const showBackBtn = useSettingValue('common.showBackBtn')
   const showExitBtn = useSettingValue('common.showExitBtn')
@@ -144,7 +147,7 @@ export default memo(() => {
   }
 
   return (
-    <View style={{ ...styles.container, borderRightColor: theme['c-border-background'] }}>
+    <View style={{ ...styles.container, backgroundColor: isCarEdition ? carTheme.nav : undefined, borderRightColor: isCarEdition ? carTheme.border : theme['c-border-background'] }}>
       <Header />
       <ScrollView style={styles.menus}>
         <View style={styles.list}>

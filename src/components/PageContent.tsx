@@ -9,6 +9,7 @@ import { defaultHeaders } from './common/Image'
 import SizeView from './SizeView'
 import { useBgPic } from '@/store/common/hook'
 import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 interface Props {
   children: React.ReactNode
@@ -72,10 +73,11 @@ export default ({ children }: Props) => {
   }, [children, pic, theme, windowSize.height, windowSize.width])
 
   if (isCarEdition) {
+    const carTheme = getCarTheme(theme.isDark)
     return (
       <>
         <SizeView />
-        <View style={{ flex: 1, backgroundColor: '#0A1118' }}>
+        <View style={{ flex: 1, backgroundColor: carTheme.page }}>
           {children}
         </View>
       </>
