@@ -4,7 +4,7 @@
 
 - 下载测试包：[Releases](https://github.com/Tingfe/lx-music-car/releases)
 - 同步服务：[Tingfe/lx-music-sync-server](https://github.com/Tingfe/lx-music-sync-server)
-- 当前版本：`v1.8.8`
+- 当前版本：`v1.8.9`
 - 包名：`cn.toside.music.mobile.car`
 - 发布包仅提供一个 `universal.apk`。
 
@@ -15,6 +15,7 @@
 - 顶栏提供快速日间/夜间切换；主题保存在车机本地，不会被手机或桌面配置覆盖。
 - `main` 分支推送自动构建内置 JavaScript bundle 的测试 APK，并作为 GitHub Pre-release 发布；无需 Metro，也不依赖正式签名密钥。
 - 应用内更新仅读取本仓库的正式 Release。
+- 默认只检查正式版；在「设置 → 关于」开启“接收测试版更新”后，可直接检测和安装最新 Pre-release 的 universal APK。
 
 完整安装、兼容性、升级与车机交互边界见：[车机版说明](docs/CAR_EDITION.md)。
 
