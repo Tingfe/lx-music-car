@@ -61,7 +61,7 @@ const LeftHeader = () => {
         <Text style={styles.leftTitle} size={isCarEdition ? 24 : 18}>{t(id)}</Text>
       </View>
       {headerComponents[id] ?? null}
-      <ThemeToggle />
+      {isCarEdition ? <DriveBadge /> : <ThemeToggle />}
 
       {/* <TouchableOpacity style={styles.btn} onPress={openSetting}>
         <Icon style={{ ...styles.btnText, color: theme['c-font'] }} name="setting" size={styles.btnText.fontSize} />
@@ -92,10 +92,19 @@ const RightHeader = () => {
         <Text style={styles.rightTitle} size={isCarEdition ? 24 : 18}>{t(id)}</Text>
       </View>
       {headerComponents[id] ?? null}
-      <ThemeToggle />
+      {isCarEdition ? <DriveBadge /> : <ThemeToggle />}
       {/* <TouchableOpacity style={styles.btn} onPress={openSetting}>
         <Icon style={{ ...styles.btnText, color: theme['c-font'] }} name="setting" size={styles.btnText.fontSize} />
       </TouchableOpacity> */}
+    </View>
+  )
+}
+
+const DriveBadge = () => {
+  return (
+    <View style={styles.driveBadge}>
+      <Icon name="logo" size={22} color="#35D7C2" />
+      <Text size={14} color="#B8C7D5">LX DRIVE</Text>
     </View>
   )
 }
@@ -126,6 +135,9 @@ const styles = createStyle({
     alignItems: 'center',
     // backgroundColor: 'rgba(0,0,0,0.1)',
     zIndex: 10,
+    backgroundColor: isCarEdition ? '#101923' : undefined,
+    borderBottomWidth: isCarEdition ? 1 : 0,
+    borderBottomColor: isCarEdition ? '#253443' : undefined,
   },
   left: {
     flex: 1,
@@ -150,11 +162,11 @@ const styles = createStyle({
     justifyContent: 'center',
   },
   leftTitle: {
-    paddingLeft: 10,
+    paddingLeft: isCarEdition ? 24 : 10,
     paddingRight: 16,
   },
   rightTitle: {
-    paddingLeft: 16,
+    paddingLeft: isCarEdition ? 24 : 16,
     paddingRight: 16,
   },
   themeToggle: {
@@ -165,6 +177,15 @@ const styles = createStyle({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
+  },
+  driveBadge: {
+    minWidth: 132,
+    height: '100%',
+    paddingHorizontal: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
 })
 

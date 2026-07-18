@@ -4,15 +4,15 @@
 
 - 下载测试包：[Releases](https://github.com/Tingfe/lx-music-car/releases)
 - 同步服务：[Tingfe/lx-music-sync-server](https://github.com/Tingfe/lx-music-sync-server)
-- 当前版本：`v1.8.9`
+- 当前版本：`v1.8.10`
 - 包名：`cn.toside.music.mobile.car`
 - 发布包仅提供一个 `universal.apk`。
 
 ## 车机版设计
 
-- 强制横屏、沉浸式全屏、禁止多窗口缩放，主页保持常亮。
-- 车机专属驾驶舱布局：108dp 文字侧边导航、72dp 顶栏、90dp 播放栏、68dp 播放控制和放大的可读文字。
-- 顶栏提供快速日间/夜间切换；主题保存在车机本地，不会被手机或桌面配置覆盖。
+- 强制横屏、沉浸式全屏，主页保持常亮；系统栏在恢复焦点或页面跳转后会再次隐藏。
+- 车机专属驾驶舱布局：172dp 文字侧边导航、72dp 顶栏、112dp 播放栏、68dp 播放控制和放大的可读文字。
+- 固定的深色驾驶舱底色，移除图片背景与浅色面板，降低夜间眩光与视觉干扰。
 - `main` 分支推送自动构建内置 JavaScript bundle 的测试 APK，并作为 GitHub Pre-release 发布；无需 Metro，也不依赖正式签名密钥。
 - 应用内更新仅读取本仓库的正式 Release。
 - 默认只检查正式版；在「设置 → 关于」开启“接收测试版更新”后，可直接检测和安装最新 Pre-release 的 universal APK。

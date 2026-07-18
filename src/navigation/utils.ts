@@ -5,6 +5,7 @@ import {
   SYNC_MODE_MODAL,
 } from './screenNames'
 import themeState from '@/store/theme/state'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 
 export const getStatusBarStyle = (isDark: boolean) => isDark ? 'light' : 'dark'
@@ -30,12 +31,12 @@ export const showPactModal = () => {
         },
         statusBar: {
           drawBehind: true,
-          visible: true,
+          visible: !isCarEdition,
           style: getStatusBarStyle(theme.isDark),
           backgroundColor: 'transparent',
         },
         navigationBar: {
-          // visible: false,
+          visible: !isCarEdition,
           backgroundColor: theme['c-content-background'],
         },
         // animations: {
@@ -79,12 +80,12 @@ export const showVersionModal = () => {
         },
         statusBar: {
           drawBehind: true,
-          visible: true,
+          visible: !isCarEdition,
           style: getStatusBarStyle(theme.isDark),
           backgroundColor: 'transparent',
         },
         navigationBar: {
-          // visible: false,
+          visible: !isCarEdition,
           backgroundColor: theme['c-content-background'],
         },
         // animations: {
@@ -128,12 +129,12 @@ export const showSyncModeModal = () => {
         },
         statusBar: {
           drawBehind: true,
-          visible: true,
+          visible: !isCarEdition,
           style: getStatusBarStyle(theme.isDark),
           backgroundColor: 'transparent',
         },
         navigationBar: {
-          // visible: false,
+          visible: !isCarEdition,
           backgroundColor: theme['c-content-background'],
         },
         // animations: {

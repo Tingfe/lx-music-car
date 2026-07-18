@@ -14,6 +14,7 @@ import { NAV_SHEAR_NATIVE_IDS } from '@/config/constant'
 import { getStatusBarStyle } from './utils'
 import { windowSizeTools } from '@/utils/windowSizeTools'
 import { type ListInfoItem } from '@/store/songlist/state'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 // const store = getStore()
 // const getTheme = () => getter('common', 'theme')(store.getState())
@@ -67,12 +68,12 @@ export async function pushHomeScreen() {
               },
               statusBar: {
                 drawBehind: true,
-                visible: true,
+                visible: !isCarEdition,
                 style: getStatusBarStyle(theme.isDark),
                 backgroundColor: 'transparent',
               },
               navigationBar: {
-                // visible: false,
+                visible: !isCarEdition,
                 backgroundColor: theme['c-content-background'],
               },
               layout: {
@@ -132,12 +133,12 @@ export function pushPlayDetailScreen(componentId: string, skipAnimation = false)
           },
           statusBar: {
             drawBehind: true,
-            visible: true,
+            visible: !isCarEdition,
             style: getStatusBarStyle(theme.isDark),
             backgroundColor: 'transparent',
           },
           navigationBar: {
-            // visible: false,
+            visible: !isCarEdition,
             backgroundColor: theme['c-content-background'],
           },
           layout: {
@@ -217,12 +218,12 @@ export function pushSonglistDetailScreen(componentId: string, info: ListInfoItem
           },
           statusBar: {
             drawBehind: true,
-            visible: true,
+            visible: !isCarEdition,
             style: getStatusBarStyle(theme.isDark),
             backgroundColor: 'transparent',
           },
           navigationBar: {
-            // visible: false,
+            visible: !isCarEdition,
             backgroundColor: theme['c-content-background'],
           },
           layout: {
@@ -350,12 +351,12 @@ export function pushCommentScreen(componentId: string) {
           },
           statusBar: {
             drawBehind: true,
-            visible: true,
+            visible: !isCarEdition,
             style: getStatusBarStyle(theme.isDark),
             backgroundColor: 'transparent',
           },
           navigationBar: {
-            // visible: false,
+            visible: !isCarEdition,
             backgroundColor: theme['c-content-background'],
           },
           layout: {

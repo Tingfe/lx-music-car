@@ -1,6 +1,7 @@
 import { useCallback, useRef, forwardRef, useImperativeHandle, useState } from 'react'
 // import { StyleSheet } from 'react-native'
 import Input, { type InputType, type InputProps } from '@/components/common/Input'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 export interface SearchInputProps {
   onChangeText: (text: string) => void
@@ -63,6 +64,8 @@ export default forwardRef<SearchInputType, SearchInputProps>(({ onChangeText, on
       onClearText={handleClearText}
       onTouchStart={onTouchStart}
       clearBtn
+      size={isCarEdition ? 20 : 14}
+      style={isCarEdition ? { height: 48, borderRadius: 6, paddingLeft: 16 } : undefined}
     />
   )
 })

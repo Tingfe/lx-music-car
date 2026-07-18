@@ -14,8 +14,8 @@ import Text from '@/components/common/Text'
 import { useI18n } from '@/lang'
 import { isCarEdition } from '@/utils/nativeModules/utils'
 
-const NAV_WIDTH = isCarEdition ? 108 : 68
-const MENU_HEIGHT = isCarEdition ? 72 : undefined
+const NAV_WIDTH = isCarEdition ? 172 : 68
+const MENU_HEIGHT = isCarEdition ? 88 : undefined
 
 const styles = createStyle({
   container: {
@@ -27,10 +27,11 @@ const styles = createStyle({
     borderRightWidth: BorderWidths.normal,
     paddingBottom: 10,
     width: NAV_WIDTH,
+    backgroundColor: isCarEdition ? '#0D161F' : undefined,
   },
   header: {
-    paddingTop: 15,
-    paddingBottom: 15,
+    paddingTop: isCarEdition ? 22 : 15,
+    paddingBottom: isCarEdition ? 22 : 15,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -52,14 +53,15 @@ const styles = createStyle({
     paddingBottom: 15,
     // paddingLeft: 25,
     // paddingRight: 25,
-    justifyContent: 'center',
+    justifyContent: isCarEdition ? 'flex-start' : 'center',
     alignItems: 'center',
     // backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   carMenuItem: {
     minHeight: MENU_HEIGHT,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingHorizontal: 28,
   },
   iconContent: {
     // width: 24,
@@ -67,7 +69,7 @@ const styles = createStyle({
     alignItems: 'center',
   },
   text: {
-    paddingLeft: 15,
+    paddingLeft: isCarEdition ? 18 : 15,
     // fontWeight: '500',
   },
 })
@@ -78,7 +80,7 @@ const Header = () => {
   return (
     <View style={{ paddingTop: statusBarHeight }}>
       <View style={styles.header}>
-        <Icon name="logo" color={theme['c-primary-dark-100-alpha-300']} size={22} />
+        <Icon name="logo" color={isCarEdition ? '#35D7C2' : theme['c-primary-dark-100-alpha-300']} size={isCarEdition ? 28 : 22} />
         {/* <Text style={styles.headerText} size={16} color={theme['c-primary-dark-100-alpha-300']}>LX Music</Text> */}
       </View>
     </View>
@@ -97,21 +99,21 @@ const MenuItem = ({ id, icon, onPress }: {
   const theme = useTheme()
 
   const itemStyle = [styles.menuItem, isCarEdition ? styles.carMenuItem : null]
-  const iconSize = isCarEdition ? 30 : 20
-  const activeBackground = isCarEdition ? { backgroundColor: theme['c-primary-alpha-800'] } : null
+  const iconSize = isCarEdition ? 32 : 20
+  const activeBackground = isCarEdition ? { backgroundColor: '#18323A', borderLeftWidth: 4, borderLeftColor: '#35D7C2', paddingLeft: 24 } : null
 
   return activeId == id
     ? <View style={[itemStyle, activeBackground]}>
         <View style={styles.iconContent}>
-          <Icon name={icon} size={iconSize} color={theme['c-primary-font-active']} />
+          <Icon name={icon} size={iconSize} color={isCarEdition ? '#35D7C2' : theme['c-primary-font-active']} />
         </View>
-        {isCarEdition ? <Text style={styles.text} size={12} color={theme['c-primary-font']}>{t(id)}</Text> : null}
+        {isCarEdition ? <Text style={styles.text} size={16} color="#EAF5F6">{t(id)}</Text> : null}
       </View>
     : <TouchableOpacity style={itemStyle} onPress={() => { onPress(id) }}>
         <View style={styles.iconContent}>
-          <Icon name={icon} size={iconSize} color={theme['c-font-label']} />
+          <Icon name={icon} size={iconSize} color={isCarEdition ? '#91A3B2' : theme['c-font-label']} />
         </View>
-        {isCarEdition ? <Text style={styles.text} size={12}>{t(id)}</Text> : null}
+        {isCarEdition ? <Text style={styles.text} size={16} color="#C3D0D9">{t(id)}</Text> : null}
       </TouchableOpacity>
 }
 

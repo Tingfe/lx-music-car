@@ -13,6 +13,7 @@ import { createStyle } from '@/utils/tools'
 import { useTheme } from '@/store/theme/hook'
 import { type Source as MusicSource } from '@/store/search/music/state'
 import { type Source as SonglistSource } from '@/store/search/songlist/state'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 type Sources = Readonly<Array<MusicSource | SonglistSource>>
 type SourceSelectorProps = _SourceSelectorProps<Sources>
@@ -52,9 +53,14 @@ export default forwardRef<HeaderBarType, HeaderBarProps>(({ onSourceChange, onTi
 
 
   return (
-    <View style={{ ...styles.searchBar, borderBottomColor: theme['c-border-background'] }}>
+    <View style={{
+      ...styles.searchBar,
+      height: isCarEdition ? 64 : 38,
+      paddingRight: isCarEdition ? 24 : 10,
+      borderBottomColor: isCarEdition ? '#263848' : theme['c-border-background'],
+    }}>
       <View style={styles.selector}>
-        <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} center />
+        <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} center fontSize={isCarEdition ? 18 : 15} />
       </View>
       <SearchInput
         ref={searchInputRef}

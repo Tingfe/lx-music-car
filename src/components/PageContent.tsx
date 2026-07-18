@@ -8,6 +8,7 @@ import { scaleSizeAbsHR } from '@/utils/pixelRatio'
 import { defaultHeaders } from './common/Image'
 import SizeView from './SizeView'
 import { useBgPic } from '@/store/common/hook'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 interface Props {
   children: React.ReactNode
@@ -69,6 +70,17 @@ export default ({ children }: Props) => {
       </View>
     )
   }, [children, pic, theme, windowSize.height, windowSize.width])
+
+  if (isCarEdition) {
+    return (
+      <>
+        <SizeView />
+        <View style={{ flex: 1, backgroundColor: '#0A1118' }}>
+          {children}
+        </View>
+      </>
+    )
+  }
 
   return (
     <>
