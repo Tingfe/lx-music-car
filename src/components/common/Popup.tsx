@@ -8,6 +8,8 @@ import { createStyle } from '@/utils/tools'
 import { useTheme } from '@/store/theme/hook'
 import Text from './Text'
 import { useStatusbarHeight } from '@/store/common/hook'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 const styles = createStyle({
   centeredView: {
@@ -23,14 +25,14 @@ const styles = createStyle({
   header: {
     flex: 0,
     flexDirection: 'row',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopLeftRadius: isCarEdition ? 12 : 8,
+    borderTopRightRadius: isCarEdition ? 12 : 8,
   },
   title: {
-    paddingLeft: 10,
-    paddingRight: 25,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingLeft: isCarEdition ? 20 : 10,
+    paddingRight: isCarEdition ? 64 : 25,
+    paddingTop: isCarEdition ? 16 : 10,
+    paddingBottom: isCarEdition ? 16 : 10,
     // lineHeight: 20,
   },
   closeBtn: {
@@ -39,8 +41,8 @@ const styles = createStyle({
     // borderTopRightRadius: 8,
     flexGrow: 0,
     flexShrink: 0,
-    height: 30,
-    width: 30,
+    height: isCarEdition ? 56 : 30,
+    width: isCarEdition ? 56 : 30,
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: '#eee',
@@ -71,6 +73,7 @@ export default forwardRef<PopupType, PopupProps>(({
   children,
 }: PopupProps, ref) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const { keyboardShown, keyboardHeight } = useKeyboard()
   const statusBarHeight = useStatusbarHeight()
 
@@ -84,9 +87,9 @@ export default forwardRef<PopupType, PopupProps>(({
 
   const closeBtnComponent = useMemo(() => closeBtn
     ? <TouchableOpacity style={styles.closeBtn} onPress={() => modalRef.current?.setVisible(false)}>
-        <Icon name="close" style={{ color: theme['c-font-label'] }} size={12} />
+        <Icon name="close" style={{ color: isCarEdition ? carTheme.textMuted : theme['c-font-label'] }} size={isCarEdition ? 20 : 12} />
       </TouchableOpacity>
-    : null, [closeBtn, theme])
+    : null, [carTheme.textMuted, closeBtn, theme])
 
   const [centeredViewStyle, modalViewStyle] = useMemo(() => {
     switch (position) {
@@ -161,8 +164,8 @@ export default forwardRef<PopupType, PopupProps>(({
             maxHeight: '78%',
             minHeight: '20%',
             // backgroundColor: 'white',
-            borderTopLeftRadius: 8,
-            borderTopRightRadius: 8,
+            borderTopLeftRadius: isCarEdition ? 12 : 8,
+            borderTopRightRadius: isCarEdition ? 12 : 8,
           },
         ] as const
     }
@@ -171,9 +174,9 @@ export default forwardRef<PopupType, PopupProps>(({
   return (
     <Modal onHide={onHide} keyHide={keyHide} bgHide={bgHide} bgColor="rgba(50,50,50,.2)" ref={modalRef}>
       <View style={{ ...styles.centeredView, ...centeredViewStyle, paddingBottom: keyboardShown ? keyboardHeight : 0 }}>
-        <View style={{ ...styles.modalView, ...modalViewStyle, backgroundColor: theme['c-content-background'] }} onStartShouldSetResponder={() => true}>
-          <View style={styles.header}>
-            <Text size={13} style={styles.title} numberOfLines={1}>{title}</Text>
+        <View style={{ ...styles.modalView, ...modalViewStyle, backgroundColor: isCarEdition ? carTheme.surface : theme['c-content-background'] }} onStartShouldSetResponder={() => true}>
+          <View style={{ ...styles.header, backgroundColor: isCarEdition ? carTheme.active : undefined }}>
+            <Text size={isCarEdition ? 19 : 13} color={isCarEdition ? carTheme.text : undefined} style={styles.title} numberOfLines={1}>{title}</Text>
             {closeBtnComponent}
           </View>
           {children}

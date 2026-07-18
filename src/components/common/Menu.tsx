@@ -8,9 +8,11 @@ import { createStyle } from '@/utils/tools'
 import { useTheme } from '@/store/theme/hook'
 import Text from './Text'
 import { scaleSizeH, scaleSizeW } from '@/utils/pixelRatio'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
-const menuItemHeight = scaleSizeH(40)
-const menuItemWidth = scaleSizeW(100)
+const menuItemHeight = scaleSizeH(isCarEdition ? 64 : 40)
+const menuItemWidth = scaleSizeW(isCarEdition ? 180 : 100)
 
 export interface Position { w: number, h: number, x: number, y: number, menuWidth?: number, menuHeight?: number }
 export interface MenuSize { width?: number, height?: number }
@@ -71,10 +73,11 @@ const Menu = ({
   onPress = () => {},
   onHide,
   activeId,
-  fontSize = 15,
+  fontSize = isCarEdition ? 17 : 15,
   center = false,
 }: Props) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const windowSize = useWindowSize()
   // const fadeAnim = useRef(new Animated.Value(0)).current
   // console.log(buttonPosition)
@@ -127,7 +130,7 @@ const Menu = ({
   // console.log(menuStyle)
   // console.log(menuItemStyle)
   return (
-    <View style={{ ...styles.menu, ...menuStyle, backgroundColor: theme['c-content-background'] }} onStartShouldSetResponder={() => true}>
+    <View style={{ ...styles.menu, ...menuStyle, borderWidth: isCarEdition ? 1 : undefined, borderColor: isCarEdition ? carTheme.border : undefined, borderRadius: isCarEdition ? 10 : 2, backgroundColor: isCarEdition ? carTheme.surface : theme['c-content-background'] }} onStartShouldSetResponder={() => true}>
       <Animated.ScrollView keyboardShouldPersistTaps={'always'}>
         {
           menus.map((menu, index) => (
@@ -137,7 +140,7 @@ const Menu = ({
                     key={menu.action}
                     style={{ ...styles.menuItem, width: menuItemStyle.width, height: menuItemStyle.height, opacity: 0.4 }}
                   >
-                    <Text style={{ textAlign: center ? 'center' : 'left' }} size={fontSize} numberOfLines={1}>{menu.label}</Text>
+                    <Text style={{ textAlign: center ? 'center' : 'left' }} color={isCarEdition ? carTheme.textMuted : undefined} size={fontSize} numberOfLines={1}>{menu.label}</Text>
                   </View>
                 )
               : menu.action == activeId
@@ -146,17 +149,17 @@ const Menu = ({
                       key={menu.action}
                       style={{ ...styles.menuItem, width: menuItemStyle.width, height: menuItemStyle.height }}
                     >
-                      <Text style={{ textAlign: center ? 'center' : 'left' }} color={theme['c-primary-font-active']} size={fontSize} numberOfLines={1}>{menu.label}</Text>
+                      <Text style={{ textAlign: center ? 'center' : 'left' }} color={isCarEdition ? carTheme.accent : theme['c-primary-font-active']} size={fontSize} numberOfLines={1}>{menu.label}</Text>
                     </View>
                   )
                 : (
                     <TouchableHighlight
                       key={menu.action}
                       style={{ ...styles.menuItem, width: menuItemStyle.width, height: menuItemStyle.height }}
-                      underlayColor={theme['c-primary-background-active']}
+                      underlayColor={isCarEdition ? carTheme.active : theme['c-primary-background-active']}
                       onPress={() => { menuPress(menu) }}
                     >
-                      <Text style={{ textAlign: center ? 'center' : 'left' }} size={fontSize} numberOfLines={1}>{menu.label}</Text>
+                      <Text style={{ textAlign: center ? 'center' : 'left' }} color={isCarEdition ? carTheme.text : undefined} size={fontSize} numberOfLines={1}>{menu.label}</Text>
                     </TouchableHighlight>
                   )
 

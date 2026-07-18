@@ -8,8 +8,10 @@ import { createStyle } from '@/utils/tools'
 import { useTheme } from '@/store/theme/hook'
 import Text from './Text'
 import { scaleSizeH } from '@/utils/pixelRatio'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
-const HEADER_HEIGHT = 20
+const HEADER_HEIGHT = isCarEdition ? 56 : 20
 const styles = createStyle({
   centeredView: {
     flex: 1,
@@ -21,7 +23,7 @@ const styles = createStyle({
     minWidth: '60%',
     maxHeight: '78%',
     // backgroundColor: 'white',
-    borderRadius: 4,
+    borderRadius: isCarEdition ? 12 : 4,
     // shadowColor: '#000',
     // shadowOffset: {
     //   width: 0,
@@ -35,13 +37,13 @@ const styles = createStyle({
     flexGrow: 0,
     flexShrink: 0,
     flexDirection: 'row',
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4,
+    borderTopLeftRadius: isCarEdition ? 12 : 4,
+    borderTopRightRadius: isCarEdition ? 12 : 4,
     height: HEADER_HEIGHT,
   },
   title: {
-    paddingLeft: 5,
-    paddingRight: 25,
+    paddingLeft: isCarEdition ? 20 : 5,
+    paddingRight: isCarEdition ? 64 : 25,
     lineHeight: HEADER_HEIGHT,
   },
   closeBtn: {
@@ -80,6 +82,7 @@ export default forwardRef<DialogType, DialogProps>(({
   height,
 }: DialogProps, ref) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const { keyboardShown, keyboardHeight } = useKeyboard()
   const modalRef = useRef<ModalType>(null)
 
@@ -91,18 +94,18 @@ export default forwardRef<DialogType, DialogProps>(({
 
   const closeBtnComponent = useMemo(() => {
     return closeBtn
-      ? <TouchableHighlight style={{ ...styles.closeBtn, width: scaleSizeH(HEADER_HEIGHT) }} underlayColor={theme['c-primary-dark-200-alpha-600']} onPress={() => modalRef.current?.setVisible(false)}>
-          <Icon name="close" color={theme['c-primary-dark-500-alpha-500']} size={10} />
+      ? <TouchableHighlight style={{ ...styles.closeBtn, width: scaleSizeH(HEADER_HEIGHT) }} underlayColor={isCarEdition ? carTheme.active : theme['c-primary-dark-200-alpha-600']} onPress={() => modalRef.current?.setVisible(false)}>
+          <Icon name="close" color={isCarEdition ? carTheme.textMuted : theme['c-primary-dark-500-alpha-500']} size={isCarEdition ? 20 : 10} />
         </TouchableHighlight>
       : null
-  }, [closeBtn, theme])
+  }, [carTheme.active, carTheme.textMuted, closeBtn, theme])
 
   return (
     <Modal onHide={onHide} keyHide={keyHide} bgHide={bgHide} bgColor="rgba(50,50,50,.3)" ref={modalRef}>
       <View style={{ ...styles.centeredView, paddingBottom: keyboardShown ? keyboardHeight : 0 }}>
-        <View style={{ ...styles.modalView, height, backgroundColor: theme['c-content-background'] }} onStartShouldSetResponder={() => true}>
-          <View style={{ ...styles.header, backgroundColor: theme['c-primary-light-100-alpha-100'] }}>
-            <Text style={styles.title} size={13} color={theme['c-primary-light-1000']} numberOfLines={1}>{title}</Text>
+        <View style={{ ...styles.modalView, height, backgroundColor: isCarEdition ? carTheme.surface : theme['c-content-background'] }} onStartShouldSetResponder={() => true}>
+          <View style={{ ...styles.header, backgroundColor: isCarEdition ? carTheme.active : theme['c-primary-light-100-alpha-100'] }}>
+            <Text style={styles.title} size={isCarEdition ? 19 : 13} color={isCarEdition ? carTheme.text : theme['c-primary-light-1000']} numberOfLines={1}>{title}</Text>
             {closeBtnComponent}
           </View>
           {children}
