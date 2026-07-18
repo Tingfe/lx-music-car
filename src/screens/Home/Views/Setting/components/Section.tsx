@@ -2,6 +2,8 @@ import { View } from 'react-native'
 
 import { createStyle } from '@/utils/tools'
 import { useTheme } from '@/store/theme/hook'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 import Text from '@/components/common/Text'
 
 
@@ -12,10 +14,11 @@ interface Props {
 
 export default ({ title, children }: Props) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   return (
     <View style={styles.container}>
-      <Text style={{ ...styles.title, borderLeftColor: theme['c-primary'] }} size={16} >{title}</Text>
+      <Text style={{ ...styles.title, borderLeftColor: isCarEdition ? carTheme.accent : theme['c-primary'] }} size={isCarEdition ? 18 : 16} >{title}</Text>
       <View>
         {children}
       </View>
@@ -27,7 +30,7 @@ export default ({ title, children }: Props) => {
 const styles = createStyle({
   container: {
     // paddingLeft: 10,
-    // backgroundColor: 'rgba(0,0,0,0.2)',
+    marginBottom: isCarEdition ? 20 : 0,
   },
   title: {
     borderLeftWidth: 5,

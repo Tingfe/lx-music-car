@@ -12,6 +12,8 @@ import { handleCollect, handlePlay } from '../listAction'
 import boardState, { type InitState } from '@/store/leaderboard/state'
 import { useTheme } from '@/store/theme/hook'
 import { getBoardsList } from '@/core/leaderboard'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 type Sources = Readonly<InitState['sources']>
 // type SourceSelectorProps = _SourceSelectorProps<Sources>
@@ -27,6 +29,7 @@ export interface LeftBarType {
 
 export default forwardRef<LeftBarType, LeftBarProps>(({ onChangeList }, ref) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const sourceSelectorRef = useRef<SourceSelectorType>(null)
   const boardsListRef = useRef<BoardsListType>(null)
   const boundInfo = useRef<{ source: LX.OnlineSource, id: string | null }>({ source: 'kw', id: null })
@@ -67,7 +70,7 @@ export default forwardRef<LeftBarType, LeftBarProps>(({ onChangeList }, ref) => 
   }
 
   return (
-    <View style={{ ...styles.container, borderRightColor: theme['c-list-header-border-bottom'] }}>
+    <View style={{ ...styles.container, backgroundColor: isCarEdition ? carTheme.surface : undefined, borderRightColor: isCarEdition ? carTheme.border : theme['c-list-header-border-bottom'] }}>
       <View style={styles.selector}>
         <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} />
       </View>
@@ -84,15 +87,14 @@ export default forwardRef<LeftBarType, LeftBarProps>(({ onChangeList }, ref) => 
 const styles = createStyle({
   container: {
     flexDirection: 'column',
-    width: '26%',
-    maxWidth: 180,
-    minWidth: 110,
+    width: isCarEdition ? '30%' : '26%',
+    maxWidth: isCarEdition ? 240 : 180,
+    minWidth: isCarEdition ? 176 : 110,
     flexGrow: 0,
     flexShrink: 0,
     borderRightWidth: BorderWidths.normal,
   },
   selector: {
-    height: 38,
+    height: isCarEdition ? 72 : 38,
   },
 })
-

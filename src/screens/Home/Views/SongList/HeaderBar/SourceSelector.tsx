@@ -7,6 +7,7 @@ import SourceSelector, {
   type SourceSelectorProps as _SourceSelectorProps,
 } from '@/components/SourceSelector'
 import songlistState, { type Source, type InitState } from '@/store/songlist/state'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 type Sources = Readonly<InitState['sources']>
 type SourceSelectorCommonProps = _SourceSelectorProps<Sources>
@@ -33,7 +34,7 @@ export default forwardRef<SourceSelectorType, SourceSelectorProps>(({ style, onS
 
   return (
     <View style={StyleSheet.compose<ViewStyle>(styles.selector, style)}>
-      <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} center />
+      <SourceSelector ref={sourceSelectorRef} onSourceChange={onSourceChange} center fontSize={isCarEdition ? 17 : 15} />
     </View>
   )
 })

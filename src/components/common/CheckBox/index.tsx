@@ -7,6 +7,7 @@ import { scaleSizeH, scaleSizeW } from '@/utils/pixelRatio'
 import { useTheme } from '@/store/theme/hook'
 import Text from '../Text'
 import { Icon } from '../Icon'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 export interface CheckBoxProps {
   check: boolean
@@ -68,23 +69,24 @@ export default ({ check, label, children, onChange, helpTitle, helpDesc, disable
   }, [helpTitle, helpDesc, size])
 
 
-  const contentStyle = { ...styles.content, marginBottom: scaleSizeH(marginBottom) }
+  const carSize = isCarEdition ? Math.max(size, 1.25) : size
+  const contentStyle = { ...styles.content, minHeight: isCarEdition ? 56 : undefined, marginBottom: scaleSizeH(marginBottom) }
   const labelStyle = { ...styles.label, marginRight: scaleSizeW(marginRight) }
 
   return (
     disabled
       ? (
           <View style={contentStyle}>
-            <CheckBox status={check ? 'checked' : 'unchecked'} disabled={true} tintColors={disabledTintColors} size={size} />
-            <View style={labelStyle}>{label ? <Text style={styles.name} color={theme['c-500']} size={15 * size}>{label}</Text> : children}</View>
+            <CheckBox status={check ? 'checked' : 'unchecked'} disabled={true} tintColors={disabledTintColors} size={carSize} />
+            <View style={labelStyle}>{label ? <Text style={styles.name} color={theme['c-500']} size={(isCarEdition ? 17 : 15) * size}>{label}</Text> : children}</View>
             {helpComponent}
           </View>
         )
       : (
           <View style={contentStyle}>
-            <CheckBox status={check ? 'checked' : 'unchecked'} disabled={isDisabled} onPress={handleLabelPress} tintColors={tintColors} size={size} />
+            <CheckBox status={check ? 'checked' : 'unchecked'} disabled={isDisabled} onPress={handleLabelPress} tintColors={tintColors} size={carSize} />
             <TouchableOpacity style={labelStyle} activeOpacity={0.3} onPress={handleLabelPress}>
-              {label ? <Text style={styles.name} size={15 * size}>{label}</Text> : children}
+              {label ? <Text style={styles.name} size={(isCarEdition ? 17 : 15) * size}>{label}</Text> : children}
             </TouchableOpacity>
             {helpComponent}
           </View>
@@ -122,4 +124,3 @@ const styles = createStyle({
     paddingVertical: 3,
   },
 })
-

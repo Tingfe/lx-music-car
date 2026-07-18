@@ -5,6 +5,8 @@ import Button, { type BtnType } from '@/components/common/Button'
 import { createStyle } from '@/utils/tools'
 import { type BoardItem } from '@/store/leaderboard/state'
 import { Icon } from '@/components/common/Icon'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 // index={index}
 // longPressIndex={longPressIndex}
@@ -22,6 +24,7 @@ export interface ListItemProps {
 
 export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMenu }: ListItemProps) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const buttonRef = useRef<BtnType>(null)
 
   const setPosition = useCallback(() => {
@@ -44,10 +47,10 @@ export default ({ item, activeId, index, longPressIndex, onBoundChange, onShowMe
     >
       {
         active
-          ? <Icon style={styles.listActiveIcon} name="chevron-right" size={12} color={theme['c-primary-font']} />
+          ? <Icon style={styles.listActiveIcon} name="chevron-right" size={isCarEdition ? 18 : 12} color={isCarEdition ? carTheme.accent : theme['c-primary-font']} />
           : null
       }
-      <Text style={styles.listName} size={14} textBreakStrategy="simple" color={active ? theme['c-primary-font-active'] : theme['c-font']} numberOfLines={1}>{item.name}</Text>
+      <Text style={styles.listName} size={isCarEdition ? 17 : 14} textBreakStrategy="simple" color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-font-active']) : (isCarEdition ? carTheme.text : theme['c-font'])} numberOfLines={1}>{item.name}</Text>
     </Button>
   )
 }
@@ -58,6 +61,7 @@ const styles = createStyle({
     paddingRight: 10,
     paddingTop: 10,
     paddingBottom: 10,
+    minHeight: isCarEdition ? 64 : undefined,
     flexDirection: 'row',
     alignItems: 'center',
   },

@@ -5,6 +5,7 @@ import type { InputType, InputProps } from '@/components/common/Input'
 import Input from '@/components/common/Input'
 import { useTheme } from '@/store/theme/hook'
 import Text from '@/components/common/Text'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 
 export interface InputItemProps extends InputProps {
@@ -62,13 +63,14 @@ export default memo(({ value, label, onChanged, ...props }: InputItemProps) => {
     textRef.current = text
   }
   return (
-    <View style={styles.container}>
-      <Text style={styles.label} size={14}>{label}</Text>
+    <View style={{ ...styles.container, paddingLeft: isCarEdition ? 0 : 25, marginBottom: isCarEdition ? 22 : 15 }}>
+      <Text style={styles.label} size={isCarEdition ? 17 : 14}>{label}</Text>
       <Input
         value={text}
         ref={inputRef}
         onChangeText={handleSetSelectMode}
-        style={{ ...styles.input, backgroundColor: theme['c-primary-input-background'] }}
+        size={isCarEdition ? 17 : undefined}
+        style={{ ...styles.input, height: isCarEdition ? 56 : 32, maxWidth: isCarEdition ? 480 : 300, borderRadius: isCarEdition ? 8 : 4, backgroundColor: theme['c-primary-input-background'] }}
         {...props}
         onBlur={saveValue}
        />

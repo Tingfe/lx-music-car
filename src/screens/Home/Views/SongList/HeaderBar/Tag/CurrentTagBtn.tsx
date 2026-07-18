@@ -3,6 +3,7 @@ import Text from '@/components/common/Text'
 import { useI18n } from '@/lang'
 import { createStyle } from '@/utils/tools'
 import { forwardRef, useImperativeHandle, useState } from 'react'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 
 export interface CurrentTagBtnProps {
@@ -26,7 +27,7 @@ export default forwardRef<CurrentTagBtnType, CurrentTagBtnProps>(({ onShowList }
 
   return (
     <Button style={styles.btn} onPress={onShowList}>
-      <Text style={styles.sourceMenu}>{name}</Text>
+      <Text size={isCarEdition ? 16 : undefined} style={styles.sourceMenu}>{name}</Text>
     </Button>
   )
 })
@@ -37,6 +38,8 @@ const styles = createStyle({
     paddingLeft: 15,
     paddingRight: 15,
     justifyContent: 'center',
+    minWidth: isCarEdition ? 92 : undefined,
+    height: isCarEdition ? 72 : undefined,
   },
   sourceMenu: {
     // height: 38,

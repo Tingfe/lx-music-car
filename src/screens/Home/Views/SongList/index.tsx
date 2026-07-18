@@ -7,12 +7,15 @@ import DrawerLayoutFixed, { type DrawerLayoutFixedType } from '@/components/comm
 import { COMPONENT_IDS } from '@/config/constant'
 import { scaleSizeW } from '@/utils/pixelRatio'
 import type { InitState as CommonState } from '@/store/common/state'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 const MAX_WIDTH = scaleSizeW(560)
 
 export default () => {
   const drawer = useRef<DrawerLayoutFixedType>(null)
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   useEffect(() => {
     const handleFixDrawer = (id: CommonState['navActiveId']) => {
@@ -49,7 +52,7 @@ export default () => {
       widthPercentageMax={MAX_WIDTH}
       drawerPosition={settingState.setting['common.drawerLayoutPosition']}
       renderNavigationView={navigationView}
-      drawerBackgroundColor={theme['c-content-background']}
+      drawerBackgroundColor={isCarEdition ? carTheme.surface : theme['c-content-background']}
       style={{ elevation: 1 }}
     >
       <Content />

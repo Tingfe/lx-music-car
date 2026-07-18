@@ -9,10 +9,12 @@ import Text from '@/components/common/Text'
 import { scaleSizeH } from '@/utils/pixelRatio'
 import { SETTING_SCREENS, type SettingScreenIds } from '../Main'
 import { useI18n } from '@/lang'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 type FlatListType = FlatListProps<SettingScreenIds>
 
-const ITEM_HEIGHT = scaleSizeH(40)
+const ITEM_HEIGHT = scaleSizeH(isCarEdition ? 64 : 40)
 
 const ListItem = memo(({ id, activeId, onPress }: {
   onPress: (item: SettingScreenIds) => void
@@ -20,6 +22,7 @@ const ListItem = memo(({ id, activeId, onPress }: {
   id: SettingScreenIds
 }) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const t = useI18n()
 
   const active = activeId == id
@@ -29,14 +32,14 @@ const ListItem = memo(({ id, activeId, onPress }: {
   }
 
   return (
-    <View style={{ ...styles.listItem, height: ITEM_HEIGHT }}>
+    <View style={{ ...styles.listItem, height: ITEM_HEIGHT, backgroundColor: active && isCarEdition ? carTheme.active : undefined, borderLeftColor: active && isCarEdition ? carTheme.accent : 'transparent' }}>
       {
         active
-          ? <Icon style={styles.listActiveIcon} name="chevron-right" size={12} color={theme['c-primary-font']} />
+          ? <Icon style={styles.listActiveIcon} name="chevron-right" size={isCarEdition ? 18 : 12} color={isCarEdition ? carTheme.accent : theme['c-primary-font']} />
           : null
       }
       <TouchableOpacity style={styles.listName} onPress={handlePress}>
-        <Text numberOfLines={1} size={16} color={active ? theme['c-primary-font'] : theme['c-font']}>{t(`setting_${id}`)}</Text>
+        <Text numberOfLines={1} size={isCarEdition ? 17 : 16} color={active ? (isCarEdition ? carTheme.text : theme['c-primary-font']) : (isCarEdition ? carTheme.textMuted : theme['c-font'])}>{t(`setting_${id}`)}</Text>
       </TouchableOpacity>
     </View>
   )
@@ -107,7 +110,7 @@ const styles = createStyle({
     alignItems: 'center',
     paddingRight: 10,
     paddingLeft: 10,
-    // borderBottomWidth: BorderWidths.normal,
+    borderLeftWidth: isCarEdition ? 4 : 0,
   },
   listActiveIcon: {
     // width: 18,
@@ -127,4 +130,3 @@ const styles = createStyle({
     // backgroundColor: 'rgba(0,0,0,0.1)',
   },
 })
-

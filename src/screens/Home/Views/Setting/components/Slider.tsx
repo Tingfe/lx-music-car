@@ -4,6 +4,7 @@ import { memo } from 'react'
 import Slider, { type SliderProps } from '@react-native-community/slider'
 import { useTheme } from '@/store/theme/hook'
 import { createStyle } from '@/utils/tools'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 export type {
   SliderProps,
@@ -15,7 +16,7 @@ export default memo(({ value, minimumValue, maximumValue, onSlidingStart, onSlid
   return (
     <Slider
       value={value}
-      style={styles.slider}
+      style={{ ...styles.slider, maxWidth: isCarEdition ? 480 : 300, height: isCarEdition ? 56 : 40 }}
       minimumValue={minimumValue}
       maximumValue={maximumValue}
       minimumTrackTintColor={theme['c-button-background-active']}

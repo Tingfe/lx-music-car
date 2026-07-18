@@ -4,6 +4,7 @@ import { View } from 'react-native'
 
 import CheckBox, { type CheckBoxProps } from '@/components/common/CheckBox'
 import { createStyle } from '@/utils/tools'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 
 export default memo((props: CheckBoxProps) => {
@@ -16,9 +17,8 @@ export default memo((props: CheckBoxProps) => {
 
 const styles = createStyle({
   container: {
-    paddingLeft: 25,
+    paddingLeft: isCarEdition ? 0 : 25,
     // marginTop: -10,
     // marginBottom: 0,
   },
 })
-

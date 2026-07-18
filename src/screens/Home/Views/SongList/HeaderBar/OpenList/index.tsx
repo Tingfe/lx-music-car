@@ -9,6 +9,7 @@ import Text from '@/components/common/Text'
 import { useI18n } from '@/lang'
 import { navigations } from '@/navigation'
 import commonState from '@/store/common/state'
+import { isCarEdition } from '@/utils/nativeModules/utils'
 
 // export interface OpenListProps {
 //   onTagChange: (name: string, id: string) => void
@@ -50,7 +51,7 @@ export default forwardRef<OpenListType, {}>((props, ref) => {
   return (
     <>
       <Button style={styles.button} onPress={() => modalRef.current?.show(songlistInfoRef.current.source)}>
-        <Text>{t('songlist_open')}</Text>
+        <Text size={isCarEdition ? 16 : undefined}>{t('songlist_open')}</Text>
       </Button>
       <Modal ref={modalRef} onOpenId={handleOpenSonglist} />
     </>
@@ -64,5 +65,7 @@ const styles = createStyle({
     justifyContent: 'center',
     paddingLeft: 12,
     paddingRight: 12,
+    minWidth: isCarEdition ? 92 : undefined,
+    height: isCarEdition ? 72 : undefined,
   },
 })

@@ -5,6 +5,8 @@ import Main, { type MainType } from '../Main'
 import { createStyle } from '@/utils/tools'
 import { BorderWidths } from '@/theme'
 import { useTheme } from '@/store/theme/hook'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 const styles = createStyle({
   container: {
@@ -14,28 +16,31 @@ const styles = createStyle({
   },
   nav: {
     height: '100%',
-    width: '22%',
+    width: isCarEdition ? '28%' : '22%',
+    minWidth: isCarEdition ? 192 : undefined,
+    maxWidth: isCarEdition ? 256 : undefined,
     borderRightWidth: BorderWidths.normal,
   },
   main: {
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingTop: 15,
-    paddingBottom: 15,
+    paddingLeft: isCarEdition ? 24 : 15,
+    paddingRight: isCarEdition ? 24 : 15,
+    paddingTop: isCarEdition ? 24 : 15,
+    paddingBottom: isCarEdition ? 24 : 15,
     flex: 0,
   },
 })
 
 export default () => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const mainRef = useRef<MainType>(null)
 
   return (
-    <View style={{ ...styles.container, borderTopColor: theme['c-border-background'] }}>
-      <View style={{ ...styles.nav, borderRightColor: theme['c-border-background'] }}>
+    <View style={{ ...styles.container, backgroundColor: isCarEdition ? carTheme.page : undefined, borderTopColor: isCarEdition ? carTheme.border : theme['c-border-background'] }}>
+      <View style={{ ...styles.nav, backgroundColor: isCarEdition ? carTheme.surface : undefined, borderRightColor: isCarEdition ? carTheme.border : theme['c-border-background'] }}>
         <NavList onChangeId={(id) => mainRef.current?.setActiveId(id)} />
       </View>
-      <ScrollView keyboardShouldPersistTaps={'always'}>
+      <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps={'always'}>
         <View style={styles.main}>
           <Main ref={mainRef} />
         </View>
