@@ -4,11 +4,20 @@
   <application
     android:label="@string/app_name"
     android:resizeableActivity="true"
-    tools:replace="android:label,android:resizeableActivity">
+    android:allowEmbedded="true"
+    tools:replace="android:label,android:resizeableActivity,android:allowEmbedded">
+    <!-- Recognized by several Android 8.1 car launchers; ignored safely elsewhere. -->
+    <meta-data
+      android:name="systemUIStatusBarStyle"
+      android:value="Hide" />
     <activity
       android:name=".MainActivity"
       android:screenOrientation="landscape"
       android:theme="@style/CarAppTheme"
-      tools:replace="android:screenOrientation,android:theme" />
+      tools:replace="android:screenOrientation,android:theme">
+      <meta-data
+        android:name="systemUIStatusBarStyle"
+        android:value="Hide" />
+    </activity>
   </application>
 </manifest>
