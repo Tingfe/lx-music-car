@@ -37,6 +37,10 @@ export class AppEvent extends Event {
     this.emit('listToggled', id)
   }
 
+  drivePinnedListsUpdated(ids: string[]) {
+    this.emit('drivePinnedListsUpdated', ids)
+  }
+
   /**
    * 音乐信息切换
    */

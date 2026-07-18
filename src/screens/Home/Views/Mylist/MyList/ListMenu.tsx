@@ -1,10 +1,11 @@
-import { useRef, useImperativeHandle, forwardRef, useState } from 'react'
+import { useRef, useImperativeHandle, forwardRef, useEffect, useState } from 'react'
 import { useI18n } from '@/lang'
 import Menu, { type Menus, type MenuType, type Position } from '@/components/common/Menu'
 import { LIST_IDS } from '@/config/constant'
 import musicSdk from '@/utils/musicSdk'
 import { scaleSizeW } from '@/utils/pixelRatio'
 import listState from '@/store/list/state'
+import { getDrivePinnedListIds, toggleDrivePinnedList } from '../drivePins'
 
 export interface SelectInfo {
   listInfo: LX.List.MyListInfo
@@ -52,7 +53,16 @@ export default forwardRef<ListMenuType, ListMenuProps>(({
   const menuRef = useRef<MenuType>(null)
   const selectInfoRef = useRef<SelectInfo>(initSelectInfo as SelectInfo)
   const [menus, setMenus] = useState<Menus>([])
+  const [pinnedIds, setPinnedIds] = useState<string[]>([])
   const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    void getDrivePinnedListIds().then(setPinnedIds)
+    global.app_event.on('drivePinnedListsUpdated', setPinnedIds)
+    return () => {
+      global.app_event.off('drivePinnedListsUpdated', setPinnedIds)
+    }
+  }, [])
 
   useImperativeHandle(ref, () => ({
     show(selectInfo, position) {
@@ -87,6 +97,7 @@ export default forwardRef<ListMenuType, ListMenuProps>(({
     }
 
     setMenus([
+      { action: 'drive_pin', label: pinnedIds.includes(listInfo.id) ? '取消固定到驾驶首页' : '固定到驾驶首页' },
       { action: 'new', label: t('list_create') },
       { action: 'rename', disabled: !rename, label: t('list_rename') },
       { action: 'sort', label: t('list_sort') },
@@ -105,6 +116,9 @@ export default forwardRef<ListMenuType, ListMenuProps>(({
     switch (action) {
       case 'new':
         onNew(Math.max(selectInfo.index - 1, 0))
+        break
+      case 'drive_pin':
+        void toggleDrivePinnedList(selectInfo.listInfo.id).then(setPinnedIds)
         break
       case 'rename':
         onRename(selectInfo.listInfo as LX.List.UserListInfo)

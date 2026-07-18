@@ -1,13 +1,16 @@
+import { useEffect, useMemo, useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 import Text from '@/components/common/Text'
 import { Icon } from '@/components/common/Icon'
 import { useTheme } from '@/store/theme/hook'
 import { useIsPlay, usePlayerMusicInfo } from '@/store/player/hook'
+import { useMyList } from '@/store/list/hook'
 import { useStatus as useSyncStatus } from '@/store/sync/hook'
-import { togglePlay } from '@/core/player/player'
-import { setNavActiveId } from '@/core/common'
+import { playNext, playPrev, togglePlay } from '@/core/player/player'
+import { setActiveList } from '@/core/list'
 import { createStyle } from '@/utils/tools'
 import { getCarTheme } from '@/theme/car'
+import { getDrivePinnedListIds } from '../drivePins'
 
 const Action = ({ icon, label, onPress, accent = false }: {
   icon: string
@@ -36,7 +39,22 @@ export default () => {
   const musicInfo = usePlayerMusicInfo()
   const isPlay = useIsPlay()
   const syncStatus = useSyncStatus()
+  const allLists = useMyList()
+  const [pinnedIds, setPinnedIds] = useState<string[]>([])
   const hasMusic = Boolean(musicInfo.id)
+
+  useEffect(() => {
+    void getDrivePinnedListIds().then(setPinnedIds)
+    global.app_event.on('drivePinnedListsUpdated', setPinnedIds)
+    return () => {
+      global.app_event.off('drivePinnedListsUpdated', setPinnedIds)
+    }
+  }, [])
+
+  const pinnedLists = useMemo(() => {
+    const listMap = new Map(allLists.map(list => [list.id, list]))
+    return pinnedIds.map(id => listMap.get(id)).filter((list): list is LX.List.MyListInfo => !!list)
+  }, [allLists, pinnedIds])
 
   const openMusicList = () => {
     global.app_event.changeLoveListVisible(true)
@@ -61,13 +79,23 @@ export default () => {
         </View>
       </TouchableOpacity>
       <View style={styles.actions}>
+        <Action icon="prevMusic" label="上一首" onPress={() => { void playPrev() }} />
         <Action icon={isPlay ? 'pause' : 'play'} label={isPlay ? '暂停' : '播放'} onPress={toggle} accent />
-        <Action icon="search-2" label="搜索" onPress={() => { setNavActiveId('nav_search') }} />
-        <Action icon="album" label="歌单" onPress={openMusicList} />
+        <Action icon="nextMusic" label="下一首" onPress={() => { void playNext() }} />
       </View>
       <View style={styles.syncStatus}>
         <View style={[styles.syncDot, { backgroundColor: syncStatus.status ? carTheme.accent : carTheme.iconMuted }]} />
         <Text size={13} color={carTheme.textMuted}>{syncStatus.status ? '同步服务已连接' : (syncStatus.message || '同步服务未连接')}</Text>
+      </View>
+      <View style={styles.pinnedRow}>
+        <Text size={13} color={carTheme.textMuted}>常用歌单</Text>
+        {pinnedLists.length
+          ? pinnedLists.map(list => (
+            <TouchableOpacity key={list.id} style={{ ...styles.pinnedList, borderColor: carTheme.border, backgroundColor: carTheme.surface }} onPress={() => { setActiveList(list.id) }}>
+              <Text size={14} color={carTheme.text} numberOfLines={1}>{list.name}</Text>
+            </TouchableOpacity>
+          ))
+          : <TouchableOpacity onPress={openMusicList}><Text size={14} color={carTheme.accent}>在歌单菜单中固定常用歌单</Text></TouchableOpacity>}
       </View>
     </View>
   )
@@ -75,7 +103,7 @@ export default () => {
 
 const styles = createStyle({
   container: {
-    minHeight: 128,
+    minHeight: 174,
     paddingLeft: 20,
     paddingRight: 18,
     paddingTop: 14,
@@ -133,5 +161,22 @@ const styles = createStyle({
     height: 7,
     borderRadius: 4,
     marginRight: 8,
+  },
+  pinnedRow: {
+    minHeight: 32,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 19,
+    marginTop: 8,
+    gap: 8,
+  },
+  pinnedList: {
+    maxWidth: 144,
+    minWidth: 76,
+    height: 30,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 15,
+    justifyContent: 'center',
   },
 })
