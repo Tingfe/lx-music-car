@@ -15,8 +15,8 @@ import { useI18n } from '@/lang'
 import { isCarEdition } from '@/utils/nativeModules/utils'
 import { getCarTheme } from '@/theme/car'
 
-const NAV_WIDTH = isCarEdition ? 172 : 68
-const MENU_HEIGHT = isCarEdition ? 88 : undefined
+const NAV_WIDTH = isCarEdition ? 164 : 68
+const MENU_HEIGHT = isCarEdition ? 76 : undefined
 
 const styles = createStyle({
   container: {
@@ -30,22 +30,21 @@ const styles = createStyle({
     width: NAV_WIDTH,
   },
   header: {
-    paddingTop: isCarEdition ? 22 : 15,
-    paddingBottom: isCarEdition ? 22 : 15,
+    paddingTop: isCarEdition ? 18 : 15,
+    paddingBottom: isCarEdition ? 18 : 15,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   headerText: {
     textAlign: 'center',
-    marginLeft: 16,
+    marginLeft: 10,
   },
   menus: {
     flex: 1,
   },
   list: {
-    // paddingTop: 10,
-    paddingBottom: 15,
+    paddingBottom: isCarEdition ? 8 : 15,
   },
   menuItem: {
     flexDirection: 'row',
@@ -61,7 +60,7 @@ const styles = createStyle({
     minHeight: MENU_HEIGHT,
     paddingTop: 10,
     paddingBottom: 10,
-    paddingHorizontal: 28,
+    paddingHorizontal: 20,
   },
   iconContent: {
     // width: 24,
@@ -82,7 +81,7 @@ const Header = () => {
     <View style={{ paddingTop: statusBarHeight }}>
       <View style={styles.header}>
         <Icon name="logo" color={isCarEdition ? carTheme.accent : theme['c-primary-dark-100-alpha-300']} size={isCarEdition ? 28 : 22} />
-        {/* <Text style={styles.headerText} size={16} color={theme['c-primary-dark-100-alpha-300']}>LX Music</Text> */}
+        {isCarEdition ? <Text style={styles.headerText} size={15} color={carTheme.text}>LX DRIVE</Text> : null}
       </View>
     </View>
   )
@@ -102,20 +101,20 @@ const MenuItem = ({ id, icon, onPress }: {
 
   const itemStyle = [styles.menuItem, isCarEdition ? styles.carMenuItem : null]
   const iconSize = isCarEdition ? 32 : 20
-  const activeBackground = isCarEdition ? { backgroundColor: carTheme.active, borderLeftWidth: 4, borderLeftColor: carTheme.accent, paddingLeft: 24 } : null
+  const activeBackground = isCarEdition ? { backgroundColor: carTheme.active, borderLeftWidth: 4, borderLeftColor: carTheme.accent, paddingLeft: 16 } : null
 
   return activeId == id
     ? <View style={[itemStyle, activeBackground]}>
         <View style={styles.iconContent}>
           <Icon name={icon} size={iconSize} color={isCarEdition ? carTheme.accent : theme['c-primary-font-active']} />
         </View>
-        {isCarEdition ? <Text style={styles.text} size={16} color={carTheme.text}>{t(id)}</Text> : null}
+        {isCarEdition ? <Text style={styles.text} size={17} color={carTheme.text}>{t(id)}</Text> : null}
       </View>
     : <TouchableOpacity style={itemStyle} onPress={() => { onPress(id) }}>
         <View style={styles.iconContent}>
           <Icon name={icon} size={iconSize} color={isCarEdition ? carTheme.iconMuted : theme['c-font-label']} />
         </View>
-        {isCarEdition ? <Text style={styles.text} size={16} color={carTheme.textMuted}>{t(id)}</Text> : null}
+        {isCarEdition ? <Text style={styles.text} size={17} color={carTheme.textMuted}>{t(id)}</Text> : null}
       </TouchableOpacity>
 }
 
@@ -125,6 +124,8 @@ export default memo(() => {
   // console.log('render drawer nav')
   const showBackBtn = useSettingValue('common.showBackBtn')
   const showExitBtn = useSettingValue('common.showExitBtn')
+  const primaryMenus = isCarEdition ? NAV_MENUS.filter(menu => menu.id != 'nav_setting') : NAV_MENUS
+  const settingMenu = isCarEdition ? NAV_MENUS.find(menu => menu.id == 'nav_setting') : null
 
   const handlePress = (id: IdType) => {
     switch (id) {
@@ -149,11 +150,12 @@ export default memo(() => {
   return (
     <View style={{ ...styles.container, backgroundColor: isCarEdition ? carTheme.nav : undefined, borderRightColor: isCarEdition ? carTheme.border : theme['c-border-background'] }}>
       <Header />
-      <ScrollView style={styles.menus}>
+      <ScrollView style={styles.menus} scrollEnabled={!isCarEdition}>
         <View style={styles.list}>
-          {NAV_MENUS.map(menu => <MenuItem key={menu.id} id={menu.id} icon={menu.icon} onPress={handlePress} />)}
+          {primaryMenus.map(menu => <MenuItem key={menu.id} id={menu.id} icon={menu.icon} onPress={handlePress} />)}
         </View>
       </ScrollView>
+      {settingMenu ? <MenuItem id={settingMenu.id} icon={settingMenu.icon} onPress={handlePress} /> : null}
       {
         showBackBtn ? <MenuItem id="back_home" icon="home" onPress={handlePress} /> : null
       }

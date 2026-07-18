@@ -9,6 +9,8 @@ import { useAssertApiSupport } from '@/store/common/hook'
 import { scaleSizeH } from '@/utils/pixelRatio'
 import Text from '@/components/common/Text'
 import Badge from '@/components/common/Badge'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 export const ITEM_HEIGHT = scaleSizeH(LIST_ITEM_HEIGHT)
 
@@ -26,6 +28,7 @@ export default memo(({ item, index, activeIndex, onPress, onShowMenu, onLongPres
   isShowInterval: boolean
 }) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   const isSelected = selectedList.includes(item)
   // console.log(item.name, selectedList, selectedList.includes(item))
@@ -44,33 +47,33 @@ export default memo(({ item, index, activeIndex, onPress, onShowMenu, onLongPres
   const singer = `${item.singer}${isShowAlbumName && item.meta.albumName ? ` · ${item.meta.albumName}` : ''}`
 
   return (
-    <View style={{ ...styles.listItem, width: rowInfo.rowWidth, height: ITEM_HEIGHT, backgroundColor: isSelected ? theme['c-primary-background-hover'] : 'rgba(0,0,0,0)', opacity: isSupported ? 1 : 0.5 }}>
+    <View style={{ ...styles.listItem, width: rowInfo.rowWidth, height: ITEM_HEIGHT, backgroundColor: isSelected ? theme['c-primary-background-hover'] : 'rgba(0,0,0,0)', borderBottomColor: isCarEdition ? carTheme.border : 'transparent', opacity: isSupported ? 1 : 0.5 }}>
       <TouchableOpacity style={styles.listItemLeft} onPress={() => { onPress(item, index) }} onLongPress={() => { onLongPress(item, index) }}>
         {
           active
-            ? <Icon style={styles.sn} name="play-outline" size={13} color={theme['c-primary-font']} />
-            : <Text style={styles.sn} size={13} color={theme['c-300']}>{index + 1}</Text>
+            ? <Icon style={styles.sn} name="play-outline" size={isCarEdition ? 19 : 13} color={isCarEdition ? carTheme.accent : theme['c-primary-font']} />
+            : <Text style={styles.sn} size={isCarEdition ? 15 : 13} color={isCarEdition ? carTheme.iconMuted : theme['c-300']}>{index + 1}</Text>
         }
         <View style={styles.itemInfo}>
           {/* <View style={styles.listItemTitle}> */}
-          <Text color={active ? theme['c-primary-font'] : theme['c-font']} numberOfLines={1}>{item.name}</Text>
+          <Text size={isCarEdition ? 17 : undefined} color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-font']) : (isCarEdition ? carTheme.text : theme['c-font'])} numberOfLines={1}>{item.name}</Text>
           {/* </View> */}
           <View style={styles.listItemSingle}>
             <Badge>{item.source.toUpperCase()}</Badge>
-            <Text style={styles.listItemSingleText} size={11} color={active ? theme['c-primary-alpha-200'] : theme['c-500']} numberOfLines={1}>
+            <Text style={styles.listItemSingleText} size={isCarEdition ? 13 : 11} color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-alpha-200']) : (isCarEdition ? carTheme.textMuted : theme['c-500'])} numberOfLines={1}>
               {singer}
             </Text>
           </View>
         </View>
         {
           isShowInterval ? (
-            <Text size={12} color={active ? theme['c-primary-alpha-400'] : theme['c-250']} numberOfLines={1}>{item.interval}</Text>
+            <Text size={isCarEdition ? 14 : 12} color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-alpha-400']) : (isCarEdition ? carTheme.iconMuted : theme['c-250'])} numberOfLines={1}>{item.interval}</Text>
           ) : null
         }
       </TouchableOpacity>
       {/* <View style={styles.listItemRight}> */}
       <TouchableOpacity onPress={handleShowMenu} ref={moreButtonRef} style={styles.moreButton}>
-        <Icon name="dots-vertical" style={{ color: theme['c-350'] }} size={12} />
+        <Icon name="dots-vertical" style={{ color: isCarEdition ? carTheme.iconMuted : theme['c-350'] }} size={isCarEdition ? 18 : 12} />
       </TouchableOpacity>
       {/* </View> */}
     </View>
@@ -95,7 +98,7 @@ const styles = createStyle({
     // paddingLeft: 10,
     paddingRight: 2,
     alignItems: 'center',
-    // borderBottomWidth: BorderWidths.normal,
+    borderBottomWidth: isCarEdition ? 1 : 0,
   },
   listItemLeft: {
     flex: 1,
@@ -149,7 +152,7 @@ const styles = createStyle({
   },
 
   moreButton: {
-    height: '80%',
+    height: '100%',
     paddingLeft: 16,
     paddingRight: 16,
     // paddingTop: 10,

@@ -13,10 +13,12 @@ import Text from '@/components/common/Text'
 import { type Position } from './ListMenu'
 import { scaleSizeH } from '@/utils/pixelRatio'
 import Loading from '@/components/common/Loading'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 type FlatListType = FlatListProps<LX.List.MyListInfo>
 
-const ITEM_HEIGHT = scaleSizeH(40)
+const ITEM_HEIGHT = scaleSizeH(isCarEdition ? 64 : 40)
 
 const ListItem = memo(({ item, index, activeId, onPress, onShowMenu }: {
   onPress: (item: LX.List.MyListInfo) => void
@@ -26,6 +28,7 @@ const ListItem = memo(({ item, index, activeId, onPress, onShowMenu }: {
   onShowMenu: (item: LX.List.MyListInfo, index: number, position: { x: number, y: number, w: number, h: number }) => void
 }) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const moreButtonRef = useRef<TouchableOpacity>(null)
   const fetching = useListFetching(item.id)
 
@@ -45,18 +48,18 @@ const ListItem = memo(({ item, index, activeId, onPress, onShowMenu }: {
   }
 
   return (
-    <View style={{ ...styles.listItem, height: ITEM_HEIGHT }}>
+    <View style={{ ...styles.listItem, height: ITEM_HEIGHT, borderBottomColor: isCarEdition ? carTheme.border : 'transparent' }}>
       {
         active
-          ? <Icon style={styles.listActiveIcon} name="chevron-right" size={12} color={theme['c-primary-font']} />
+          ? <Icon style={styles.listActiveIcon} name="chevron-right" size={isCarEdition ? 18 : 12} color={isCarEdition ? carTheme.accent : theme['c-primary-font']} />
           : null
       }
-      { fetching ? <Loading color={active ? theme['c-primary-font'] : theme['c-font']} style={styles.loading} /> : null }
+      { fetching ? <Loading color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-font']) : (isCarEdition ? carTheme.text : theme['c-font'])} style={styles.loading} /> : null }
       <TouchableOpacity style={styles.listName} onPress={handlePress}>
-        <Text numberOfLines={1} color={active ? theme['c-primary-font'] : theme['c-font']}>{item.name}</Text>
+        <Text size={isCarEdition ? 17 : undefined} numberOfLines={1} color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-font']) : (isCarEdition ? carTheme.text : theme['c-font'])}>{item.name}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={handleShowMenu} ref={moreButtonRef} style={styles.listMoreBtn}>
-        <Icon name="dots-vertical" color={theme['c-350']} size={12} />
+        <Icon name="dots-vertical" color={isCarEdition ? carTheme.iconMuted : theme['c-350']} size={isCarEdition ? 18 : 12} />
       </TouchableOpacity>
     </View>
   )
@@ -150,7 +153,7 @@ const styles = createStyle({
     alignItems: 'center',
     paddingRight: 5,
     paddingLeft: 5,
-    // borderBottomWidth: BorderWidths.normal,
+    borderBottomWidth: isCarEdition ? 1 : 0,
   },
   listActiveIcon: {
     // width: 18,
@@ -178,7 +181,7 @@ const styles = createStyle({
   // },
   listMoreBtn: {
     height: '100%',
-    width: 36,
+    width: isCarEdition ? 56 : 36,
     // height: 46,
     // paddingTop: 12,
     // paddingBottom: 12,
@@ -187,4 +190,3 @@ const styles = createStyle({
     // backgroundColor: 'rgba(0,0,0,0.1)',
   },
 })
-

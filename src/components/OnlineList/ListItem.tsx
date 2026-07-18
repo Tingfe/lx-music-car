@@ -9,6 +9,8 @@ import { useTheme } from '@/store/theme/hook'
 import { scaleSizeH } from '@/utils/pixelRatio'
 import { LIST_ITEM_HEIGHT } from '@/config/constant'
 import { createStyle, type RowInfo } from '@/utils/tools'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 export const ITEM_HEIGHT = scaleSizeH(LIST_ITEM_HEIGHT)
 
@@ -42,6 +44,7 @@ export default memo(({ item, index, showSource, onPress, onLongPress, onShowMenu
   isShowInterval: boolean
 }) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   const isSelected = selectedList.includes(item)
 
@@ -59,25 +62,25 @@ export default memo(({ item, index, showSource, onPress, onLongPress, onShowMenu
   const singer = `${item.singer}${isShowAlbumName && item.meta.albumName ? ` · ${item.meta.albumName}` : ''}`
 
   return (
-    <View style={{ ...styles.listItem, width: rowInfo.rowWidth, height: ITEM_HEIGHT, backgroundColor: isSelected ? theme['c-primary-background-hover'] : 'rgba(0,0,0,0)' }}>
+    <View style={{ ...styles.listItem, width: rowInfo.rowWidth, height: ITEM_HEIGHT, backgroundColor: isSelected ? theme['c-primary-background-hover'] : 'rgba(0,0,0,0)', borderBottomColor: isCarEdition ? carTheme.border : 'transparent' }}>
       <TouchableOpacity style={styles.listItemLeft} onPress={() => { onPress(item, index) }} onLongPress={() => { onLongPress(item, index) }}>
-        <Text style={styles.sn} size={13} color={theme['c-300']}>{index + 1}</Text>
+        <Text style={styles.sn} size={isCarEdition ? 15 : 13} color={isCarEdition ? carTheme.iconMuted : theme['c-300']}>{index + 1}</Text>
         <View style={styles.itemInfo}>
-          <Text numberOfLines={1}>{item.name}</Text>
+          <Text size={isCarEdition ? 17 : undefined} color={isCarEdition ? carTheme.text : undefined} numberOfLines={1}>{item.name}</Text>
           <View style={styles.listItemSingle}>
             { tagInfo.type ? <Badge type={tagInfo.type}>{tagInfo.text}</Badge> : null }
             { showSource ? <Badge type="tertiary">{item.source}</Badge> : null }
-            <Text style={styles.listItemSingleText} size={11} color={theme['c-500']} numberOfLines={1}>{singer}</Text>
+            <Text style={styles.listItemSingleText} size={isCarEdition ? 13 : 11} color={isCarEdition ? carTheme.textMuted : theme['c-500']} numberOfLines={1}>{singer}</Text>
           </View>
         </View>
         {
           isShowInterval ? (
-            <Text size={12} color={theme['c-250']} numberOfLines={1}>{item.interval}</Text>
+            <Text size={isCarEdition ? 14 : 12} color={isCarEdition ? carTheme.iconMuted : theme['c-250']} numberOfLines={1}>{item.interval}</Text>
           ) : null
         }
       </TouchableOpacity>
      <TouchableOpacity onPress={handleShowMenu} ref={moreButtonRef} style={styles.moreButton}>
-        <Icon name="dots-vertical" style={{ color: theme['c-350'] }} size={12} />
+        <Icon name="dots-vertical" style={{ color: isCarEdition ? carTheme.iconMuted : theme['c-350'] }} size={isCarEdition ? 18 : 12} />
       </TouchableOpacity>
     </View>
   )
@@ -98,7 +101,7 @@ const styles = createStyle({
     // paddingLeft: 10,
     paddingRight: 2,
     alignItems: 'center',
-    // borderBottomWidth: BorderWidths.normal,
+    borderBottomWidth: isCarEdition ? 1 : 0,
   },
   listItemLeft: {
     flex: 1,
@@ -159,7 +162,7 @@ const styles = createStyle({
     justifyContent: 'center',
   },
   moreButton: {
-    height: '80%',
+    height: '100%',
     paddingLeft: 16,
     paddingRight: 16,
     // paddingTop: 10,
@@ -168,4 +171,3 @@ const styles = createStyle({
     justifyContent: 'center',
   },
 })
-

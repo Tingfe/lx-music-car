@@ -65,7 +65,7 @@ export default forwardRef<SearchInputType, SearchInputProps>(({ onChangeText, on
       onTouchStart={onTouchStart}
       clearBtn
       size={isCarEdition ? 20 : 14}
-      style={isCarEdition ? { height: 48, borderRadius: 6, paddingLeft: 16 } : undefined}
+      style={isCarEdition ? { height: 56, borderRadius: 8, paddingLeft: 18 } : undefined}
     />
   )
 })

@@ -7,8 +7,8 @@ import { createStyle } from '@/utils/tools'
 import { useHorizontalMode } from '@/utils/hooks'
 import { isCarEdition } from '@/utils/nativeModules/utils'
 
-const BTN_SIZE = isCarEdition ? 34 : 24
-const TOUCH_SIZE = isCarEdition ? 68 : 46
+const BTN_SIZE = isCarEdition ? 38 : 24
+const TOUCH_SIZE = isCarEdition ? 76 : 46
 const handlePlayPrev = () => {
   void playPrev()
 }

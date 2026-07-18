@@ -13,6 +13,8 @@ import Text from '@/components/common/Text'
 import { LIST_IDS } from '@/config/constant'
 import Loading from '@/components/common/Loading'
 import { useSettingValue } from '@/store/setting/hook'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 export interface ActiveListProps {
   onShowSearchBar: () => void
@@ -24,6 +26,7 @@ export interface ActiveListType {
 
 export default forwardRef<ActiveListType, ActiveListProps>(({ onShowSearchBar, onScrollToTop }, ref) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const currentListId = useActiveListId()
   const fetching = useListFetching(currentListId)
   const langId = useSettingValue('common.langId')
@@ -59,12 +62,12 @@ export default forwardRef<ActiveListType, ActiveListProps>(({ onShowSearchBar, o
   }, [])
 
   return (
-    <TouchableOpacity onPress={showList} onLongPress={onScrollToTop} style={{ ...styles.currentList, opacity: visibleBar ? 1 : 0, borderBottomColor: theme['c-border-background'] }}>
-      <Icon style={styles.currentListIcon} color={theme['c-button-font']} name="chevron-right" size={12} />
-      { fetching ? <Loading color={theme['c-button-font']} style={styles.loading} /> : null }
-      <Text style={styles.currentListText} numberOfLines={1} color={theme['c-button-font']}>{currentListName}</Text>
+    <TouchableOpacity onPress={showList} onLongPress={onScrollToTop} style={{ ...styles.currentList, opacity: visibleBar ? 1 : 0, backgroundColor: isCarEdition ? carTheme.surface : undefined, borderBottomColor: isCarEdition ? carTheme.border : theme['c-border-background'] }}>
+      <Icon style={styles.currentListIcon} color={isCarEdition ? carTheme.accent : theme['c-button-font']} name="chevron-right" size={isCarEdition ? 18 : 12} />
+      { fetching ? <Loading color={isCarEdition ? carTheme.accent : theme['c-button-font']} style={styles.loading} /> : null }
+      <Text style={styles.currentListText} size={isCarEdition ? 18 : undefined} numberOfLines={1} color={isCarEdition ? carTheme.text : theme['c-button-font']}>{currentListName}</Text>
       <TouchableOpacity style={styles.currentListBtns} onPress={onShowSearchBar}>
-        <Icon color={theme['c-button-font']} name="search-2" />
+        <Icon color={isCarEdition ? carTheme.accent : theme['c-button-font']} name="search-2" size={isCarEdition ? 22 : undefined} />
       </TouchableOpacity>
     </TouchableOpacity>
   )
@@ -75,7 +78,7 @@ const styles = createStyle({
   currentList: {
     flexDirection: 'row',
     paddingRight: 2,
-    height: 36,
+    height: isCarEdition ? 60 : 36,
     alignItems: 'center',
     borderBottomWidth: BorderWidths.normal,
     // backgroundColor: 'rgba(0,0,0,0.2)',
@@ -98,7 +101,7 @@ const styles = createStyle({
     marginRight: 5,
   },
   currentListBtns: {
-    width: 46,
+    width: isCarEdition ? 64 : 46,
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',

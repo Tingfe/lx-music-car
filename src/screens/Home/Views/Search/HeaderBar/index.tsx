@@ -57,7 +57,7 @@ export default forwardRef<HeaderBarType, HeaderBarProps>(({ onSourceChange, onTi
   return (
     <View style={{
       ...styles.searchBar,
-      height: isCarEdition ? 64 : 38,
+      height: isCarEdition ? 72 : 38,
       paddingRight: isCarEdition ? 24 : 10,
       borderBottomColor: isCarEdition ? carTheme.border : theme['c-border-background'],
     }}>

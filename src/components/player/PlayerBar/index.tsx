@@ -24,7 +24,7 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
   const playerComponent = useMemo(() => (
     <View style={{
       ...styles.container,
-      minHeight: isCarEdition ? 112 : undefined,
+      minHeight: isCarEdition ? 124 : undefined,
       backgroundColor: isCarEdition ? carTheme.surface : theme['c-content-background'],
       borderTopColor: isCarEdition ? carTheme.border : 'transparent',
     }}>
@@ -56,8 +56,8 @@ const styles = createStyle({
     // marginTop: -progressContentPadding,
     // backgroundColor: 'rgba(0, 0, 0, .1)',
     // borderTopWidth: BorderWidths.normal2,
-    paddingVertical: 5,
-    paddingLeft: 5,
+    paddingVertical: isCarEdition ? 10 : 5,
+    paddingLeft: isCarEdition ? 10 : 5,
     // backgroundColor: AppColors.primary,
     // backgroundColor: 'red',
     borderTopLeftRadius: 6,
@@ -76,7 +76,7 @@ const styles = createStyle({
     flexDirection: 'column',
     flexGrow: 1,
     flexShrink: 1,
-    paddingLeft: 5,
+    paddingLeft: isCarEdition ? 12 : 5,
     height: '100%',
     // justifyContent: 'space-evenly',
     // height: 48,
@@ -87,8 +87,8 @@ const styles = createStyle({
     alignItems: 'center',
     flexGrow: 0,
     flexShrink: 0,
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: isCarEdition ? 12 : 5,
+    paddingRight: isCarEdition ? 12 : 5,
   },
   // row: {
   //   flexDirection: 'row',

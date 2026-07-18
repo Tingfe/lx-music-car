@@ -10,6 +10,7 @@ import Text from '@/components/common/Text'
 import { LIST_IDS } from '@/config/constant'
 import { createStyle, formatMusicName } from '@/utils/tools'
 import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 
 export default ({ isHome }: { isHome: boolean }) => {
@@ -17,6 +18,7 @@ export default ({ isHome }: { isHome: boolean }) => {
   const musicInfo = usePlayerMusicInfo()
   const downloadFileName = useSettingValue('download.fileName')
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   const handlePress = () => {
     // console.log('')
@@ -41,7 +43,7 @@ export default ({ isHome }: { isHome: boolean }) => {
   // console.log(playMusicInfo)
   return (
     <TouchableOpacity style={styles.container} onLongPress={handleLongPress} onPress={handlePress} activeOpacity={0.7} >
-      <Text size={isCarEdition ? 18 : 15} color={theme['c-font-label']} numberOfLines={1}>{title}</Text>
+      <Text size={isCarEdition ? 20 : 15} color={isCarEdition ? carTheme.text : theme['c-font-label']} numberOfLines={1}>{title}</Text>
     </TouchableOpacity>
   )
 }
