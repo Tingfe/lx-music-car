@@ -4,7 +4,7 @@
 
 - 下载测试包：[Releases](https://github.com/Tingfe/lx-music-car/releases)
 - 同步服务：[Tingfe/lx-music-sync-server](https://github.com/Tingfe/lx-music-sync-server)
-- 当前版本：`v1.8.15`
+- 当前版本：`v1.8.16`
 - 包名：`cn.toside.music.mobile.car`
 - 发布包仅提供一个 `universal.apk`。
 
@@ -15,6 +15,7 @@
 - 声明车机 Launcher 常见的 `systemUIStatusBarStyle=Hide` 元数据；不请求或伪造系统签名权限。
 - 车机专属驾驶舱布局：以“我的音乐”为新安装默认入口，侧栏将主功能与设置分组；72dp 歌曲行、60dp 歌单切换、124dp 播放栏和 76dp 播放控制均以驾驶场景触控为目标。
 - 在线歌单、榜单和设置也使用同一尺度：72dp 筛选栏、64dp 榜单与设置导航、56dp 输入/开关/滑块，避免在不同页面切换时出现手机式密集控件。
+- “我的音乐”顶部提供驾驶首页卡片：显示当前播放与同步连接状态，并提供播放/暂停、搜索、切换歌单三个直接操作；原车实体媒体按键继续由 Android 音频会话处理。
 - 专属深色 / 浅色驾驶主题：夜间为低眩光深灰蓝，白天为高对比浅灰白；顶部可一键切换，且不会同步到手机或桌面端。
 - `main` 分支推送自动构建内置 JavaScript bundle 的测试 APK，并作为 GitHub Pre-release 发布；无需 Metro，也不依赖正式签名密钥。
 - 应用内更新仅读取本仓库的正式 Release。
