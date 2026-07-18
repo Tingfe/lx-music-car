@@ -122,6 +122,8 @@ android {
         car {
             dimension "device"
             applicationIdSuffix ".car"
+            // Preserve the proven car-package version format for older Android 8.1 installers.
+            versionNameSuffix "-car"
         }
     }
 
