@@ -10,6 +10,8 @@ import { dateFormat } from '@/utils/common'
 import { createMsg2call } from 'message2call'
 import { toast } from '@/utils/tools'
 import { SYNC_CLOSE_CODE, SYNC_CODE } from '../constants'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { registerCar } from './remoteControl'
 
 let status: LX.Sync.Status = {
   status: false,
@@ -168,6 +170,11 @@ export const connect = (urlInfo: LX.Sync.UrlInfo, keyInfo: LX.Sync.KeyInfo, onIn
           message: '',
         })
         heartbeatTools.failedNum = 0
+        if (isCarEdition) {
+          void registerCar(client!).catch(err => {
+            log.r_warn(`remote control registration failed: ${err.message as string}`)
+          })
+        }
       },
     },
     timeout: 120 * 1000,
@@ -200,6 +207,7 @@ export const connect = (urlInfo: LX.Sync.UrlInfo, keyInfo: LX.Sync.KeyInfo, onIn
   client.remoteQueueDislike = message2read.createQueueRemote('dislike')
   client.remoteQueueUserApi = message2read.createQueueRemote('userApi')
   client.remoteQueueSettings = message2read.createQueueRemote('settings')
+  client.remoteQueueRemoteControl = message2read.createQueueRemote('remoteControl')
 
   client.addEventListener('message', ({ data }) => {
     if (data == 'ping') return
