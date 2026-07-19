@@ -18,13 +18,13 @@ export const getCarTheme = (isDark: boolean) => isDark
       iconMuted: '#91A3B2',
     }
   : {
-      page: '#F3F7F8',
-      surface: '#FFFFFF',
-      nav: '#E9F0F2',
-      active: '#D8F3F0',
-      border: '#C8D8DC',
-      accent: '#007F78',
-      text: '#10252B',
-      textMuted: '#49636B',
-      iconMuted: '#607982',
+      page: '#DDE7E9',
+      surface: '#EDF3F4',
+      nav: '#C9D7DA',
+      active: '#BDE9E3',
+      border: '#8EA7AD',
+      accent: '#006C65',
+      text: '#10282E',
+      textMuted: '#2F5058',
+      iconMuted: '#41636B',
     }

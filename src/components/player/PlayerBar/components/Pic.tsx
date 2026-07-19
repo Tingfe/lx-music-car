@@ -10,7 +10,7 @@ import { useCallback } from 'react'
 import { setLoadErrorPicUrl, setMusicInfo } from '@/core/player/playInfo'
 import { isCarEdition } from '@/utils/nativeModules/utils'
 
-const PIC_HEIGHT = scaleSizeH(isCarEdition ? 92 : 46)
+const PIC_HEIGHT = scaleSizeH(isCarEdition ? 82 : 46)
 
 const styles = StyleSheet.create({
   image: {

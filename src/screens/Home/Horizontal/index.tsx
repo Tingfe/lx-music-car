@@ -5,6 +5,9 @@ import StatusBar from '@/components/common/StatusBar'
 import Header from './Header'
 import Main from './Main'
 import { createStyle } from '@/utils/tools'
+import { useTheme } from '@/store/theme/hook'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 const styles = createStyle({
   container: {
@@ -18,12 +21,14 @@ const styles = createStyle({
 })
 
 export default () => {
+  const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   return (
     <>
       <StatusBar />
       <View style={styles.container}>
         <Aside />
-        <View style={styles.content}>
+        <View style={{ ...styles.content, backgroundColor: isCarEdition ? carTheme.page : undefined }}>
           <Header />
           <Main />
           <PlayerBar isHome />

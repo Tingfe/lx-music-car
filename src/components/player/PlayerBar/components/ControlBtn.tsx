@@ -6,9 +6,10 @@ import { playNext, playPrev, togglePlay } from '@/core/player/player'
 import { createStyle } from '@/utils/tools'
 import { useHorizontalMode } from '@/utils/hooks'
 import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
-const BTN_SIZE = isCarEdition ? 38 : 24
-const TOUCH_SIZE = isCarEdition ? 76 : 46
+const BTN_SIZE = isCarEdition ? 34 : 24
+const TOUCH_SIZE = isCarEdition ? 68 : 46
 const handlePlayPrev = () => {
   void playPrev()
 }
@@ -18,20 +19,22 @@ const handlePlayNext = () => {
 
 const PlayPrevBtn = () => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   return (
     <TouchableOpacity style={styles.cotrolBtn} activeOpacity={0.5} onPress={handlePlayPrev}>
-      <Icon name='prevMusic' color={theme['c-button-font']} size={BTN_SIZE} />
+      <Icon name='prevMusic' color={isCarEdition ? carTheme.accent : theme['c-button-font']} size={BTN_SIZE} />
     </TouchableOpacity>
   )
 }
 
 const PlayNextBtn = () => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   return (
     <TouchableOpacity style={styles.cotrolBtn} activeOpacity={0.5} onPress={handlePlayNext}>
-      <Icon name='nextMusic' color={theme['c-button-font']} size={BTN_SIZE} />
+      <Icon name='nextMusic' color={isCarEdition ? carTheme.accent : theme['c-button-font']} size={BTN_SIZE} />
     </TouchableOpacity>
   )
 }
@@ -39,10 +42,11 @@ const PlayNextBtn = () => {
 const TogglePlayBtn = () => {
   const isPlay = useIsPlay()
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
 
   return (
     <TouchableOpacity style={styles.cotrolBtn} activeOpacity={0.5} onPress={togglePlay}>
-      <Icon name={isPlay ? 'pause' : 'play'} color={theme['c-button-font']} size={BTN_SIZE} />
+      <Icon name={isPlay ? 'pause' : 'play'} color={isCarEdition ? carTheme.accent : theme['c-button-font']} size={BTN_SIZE} />
     </TouchableOpacity>
   )
 }

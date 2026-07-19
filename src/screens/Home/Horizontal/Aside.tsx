@@ -15,8 +15,8 @@ import { useI18n } from '@/lang'
 import { isCarEdition } from '@/utils/nativeModules/utils'
 import { getCarTheme } from '@/theme/car'
 
-const NAV_WIDTH = isCarEdition ? 164 : 68
-const MENU_HEIGHT = isCarEdition ? 76 : undefined
+const NAV_WIDTH = isCarEdition ? 150 : 68
+const MENU_HEIGHT = isCarEdition ? 72 : undefined
 
 const styles = createStyle({
   container: {
