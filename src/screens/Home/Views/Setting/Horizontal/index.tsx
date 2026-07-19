@@ -16,16 +16,16 @@ const styles = createStyle({
   },
   nav: {
     height: '100%',
-    width: isCarEdition ? '28%' : '22%',
-    minWidth: isCarEdition ? 192 : undefined,
-    maxWidth: isCarEdition ? 256 : undefined,
+    width: isCarEdition ? '23%' : '22%',
+    minWidth: isCarEdition ? 160 : undefined,
+    maxWidth: isCarEdition ? 216 : undefined,
     borderRightWidth: BorderWidths.normal,
   },
   main: {
-    paddingLeft: isCarEdition ? 24 : 15,
-    paddingRight: isCarEdition ? 24 : 15,
-    paddingTop: isCarEdition ? 24 : 15,
-    paddingBottom: isCarEdition ? 24 : 15,
+    paddingLeft: isCarEdition ? 20 : 15,
+    paddingRight: isCarEdition ? 20 : 15,
+    paddingTop: isCarEdition ? 20 : 15,
+    paddingBottom: isCarEdition ? 20 : 15,
     flex: 0,
   },
 })

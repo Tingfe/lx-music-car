@@ -7,12 +7,16 @@ import DrawerLayoutFixed, { type DrawerLayoutFixedType } from '@/components/comm
 import { COMPONENT_IDS } from '@/config/constant'
 import { scaleSizeW } from '@/utils/pixelRatio'
 import type { InitState as CommonState } from '@/store/common/state'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarTheme } from '@/theme/car'
 
 const MAX_WIDTH = scaleSizeW(400)
+const CAR_MAX_WIDTH = scaleSizeW(360)
 
 export default () => {
   const drawer = useRef<DrawerLayoutFixedType>(null)
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   // const [width, setWidth] = useState(0)
 
   useEffect(() => {
@@ -57,11 +61,11 @@ export default () => {
       ref={drawer}
       visibleNavNames={[COMPONENT_IDS.home]}
       // drawerWidth={width}
-      widthPercentage={0.82}
-      widthPercentageMax={MAX_WIDTH}
+      widthPercentage={isCarEdition ? 0.72 : 0.82}
+      widthPercentageMax={isCarEdition ? CAR_MAX_WIDTH : MAX_WIDTH}
       drawerPosition={settingState.setting['common.drawerLayoutPosition']}
       renderNavigationView={navigationView}
-      drawerBackgroundColor={theme['c-content-background']}
+      drawerBackgroundColor={isCarEdition ? carTheme.surface : theme['c-content-background']}
       style={{ elevation: 1 }}
     >
       <MusicList />

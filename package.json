@@ -1,7 +1,7 @@
 {
   "name": "lx-music-car",
-  "version": "1.8.19",
-  "versionCode": 91,
+  "version": "1.8.20",
+  "versionCode": 92,
   "private": true,
   "scripts": {
     "dev": "react-native run-android --active-arch-only",

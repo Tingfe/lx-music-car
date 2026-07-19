@@ -11,6 +11,7 @@ import { isCarEdition } from '@/utils/nativeModules/utils'
 import { getCarTheme } from '@/theme/car'
 
 const MAX_WIDTH = scaleSizeW(560)
+const CAR_MAX_WIDTH = scaleSizeW(420)
 
 export default () => {
   const drawer = useRef<DrawerLayoutFixedType>(null)
@@ -48,8 +49,8 @@ export default () => {
     <DrawerLayoutFixed
       ref={drawer}
       visibleNavNames={[COMPONENT_IDS.home]}
-      widthPercentage={0.8}
-      widthPercentageMax={MAX_WIDTH}
+      widthPercentage={isCarEdition ? 0.72 : 0.8}
+      widthPercentageMax={isCarEdition ? CAR_MAX_WIDTH : MAX_WIDTH}
       drawerPosition={settingState.setting['common.drawerLayoutPosition']}
       renderNavigationView={navigationView}
       drawerBackgroundColor={isCarEdition ? carTheme.surface : theme['c-content-background']}

@@ -87,9 +87,9 @@ export default forwardRef<LeftBarType, LeftBarProps>(({ onChangeList }, ref) => 
 const styles = createStyle({
   container: {
     flexDirection: 'column',
-    width: isCarEdition ? '30%' : '26%',
-    maxWidth: isCarEdition ? 240 : 180,
-    minWidth: isCarEdition ? 176 : 110,
+    width: isCarEdition ? '25%' : '26%',
+    maxWidth: isCarEdition ? 208 : 180,
+    minWidth: isCarEdition ? 152 : 110,
     flexGrow: 0,
     flexShrink: 0,
     borderRightWidth: BorderWidths.normal,
