@@ -46,6 +46,10 @@ const styles = createStyle({
   list: {
     paddingBottom: isCarEdition ? 8 : 15,
   },
+  utilityArea: {
+    borderTopWidth: BorderWidths.normal,
+    paddingTop: isCarEdition ? 6 : 0,
+  },
   menuItem: {
     flexDirection: 'row',
     paddingTop: 15,
@@ -61,6 +65,12 @@ const styles = createStyle({
     paddingTop: 10,
     paddingBottom: 10,
     paddingHorizontal: 20,
+  },
+  carUtilityItem: {
+    minHeight: 48,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingHorizontal: 24,
   },
   iconContent: {
     // width: 24,
@@ -89,32 +99,38 @@ const Header = () => {
 
 type IdType = InitState['navActiveId'] | 'nav_exit' | 'back_home'
 
-const MenuItem = ({ id, icon, onPress }: {
+const MenuItem = ({ id, icon, onPress, tone = 'primary' }: {
   id: IdType
   icon: string
   onPress: (id: IdType) => void
+  tone?: 'primary' | 'utility'
 }) => {
   const t = useI18n()
   const activeId = useNavActiveId()
   const theme = useTheme()
   const carTheme = getCarTheme(theme.isDark)
 
-  const itemStyle = [styles.menuItem, isCarEdition ? styles.carMenuItem : null]
-  const iconSize = isCarEdition ? 32 : 20
-  const activeBackground = isCarEdition ? { backgroundColor: carTheme.active, borderLeftWidth: 4, borderLeftColor: carTheme.accent, paddingLeft: 16 } : null
+  const isUtility = tone == 'utility'
+  const itemStyle = [styles.menuItem, isCarEdition ? (isUtility ? styles.carUtilityItem : styles.carMenuItem) : null]
+  const iconSize = isCarEdition ? (isUtility ? 22 : 32) : 20
+  const activeBackground = isCarEdition
+    ? isUtility
+      ? { backgroundColor: carTheme.surface, borderLeftWidth: 2, borderLeftColor: carTheme.border, paddingLeft: 22 }
+      : { backgroundColor: carTheme.active, borderLeftWidth: 4, borderLeftColor: carTheme.accent, paddingLeft: 16 }
+    : null
 
   return activeId == id
     ? <View style={[itemStyle, activeBackground]}>
         <View style={styles.iconContent}>
           <Icon name={icon} size={iconSize} color={isCarEdition ? carTheme.accent : theme['c-primary-font-active']} />
         </View>
-        {isCarEdition ? <Text style={styles.text} size={17} color={carTheme.text}>{t(id)}</Text> : null}
+        {isCarEdition ? <Text style={styles.text} size={isUtility ? 14 : 17} color={carTheme.text}>{t(id)}</Text> : null}
       </View>
     : <TouchableOpacity style={itemStyle} onPress={() => { onPress(id) }}>
         <View style={styles.iconContent}>
           <Icon name={icon} size={iconSize} color={isCarEdition ? carTheme.iconMuted : theme['c-font-label']} />
         </View>
-        {isCarEdition ? <Text style={styles.text} size={17} color={carTheme.textMuted}>{t(id)}</Text> : null}
+        {isCarEdition ? <Text style={styles.text} size={isUtility ? 14 : 17} color={carTheme.textMuted}>{t(id)}</Text> : null}
       </TouchableOpacity>
 }
 
@@ -161,13 +177,11 @@ export default memo(() => {
           {primaryMenus.map(menu => <MenuItem key={menu.id} id={menu.id} icon={menu.icon} onPress={handlePress} />)}
         </View>
       </ScrollView>
-      {settingMenu ? <MenuItem id={settingMenu.id} icon={settingMenu.icon} onPress={handlePress} /> : null}
-      {
-        showBackBtn ? <MenuItem id="back_home" icon="home" onPress={handlePress} /> : null
-      }
-      {
-        showExitBtn ? <MenuItem id="nav_exit" icon="exit2" onPress={handlePress} /> : null
-      }
+      <View style={[styles.utilityArea, { borderTopColor: isCarEdition ? carTheme.border : theme['c-border-background'] }]}>
+        {settingMenu ? <MenuItem id={settingMenu.id} icon={settingMenu.icon} onPress={handlePress} tone="utility" /> : null}
+        {!isCarEdition && showBackBtn ? <MenuItem id="back_home" icon="home" onPress={handlePress} /> : null}
+        {showExitBtn ? <MenuItem id="nav_exit" icon="exit2" onPress={handlePress} tone={isCarEdition ? 'utility' : 'primary'} /> : null}
+      </View>
     </View>
   )
 })
