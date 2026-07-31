@@ -30,13 +30,13 @@ export const showPactModal = () => {
           interceptTouchOutside: true,
         },
         statusBar: {
-          drawBehind: true,
-          visible: !isCarEdition,
+          drawBehind: !isCarEdition,
+          visible: true,
           style: getStatusBarStyle(theme.isDark),
           backgroundColor: 'transparent',
         },
         navigationBar: {
-          visible: !isCarEdition,
+          visible: true,
           backgroundColor: theme['c-content-background'],
         },
         // animations: {
@@ -79,13 +79,13 @@ export const showVersionModal = () => {
           interceptTouchOutside: true,
         },
         statusBar: {
-          drawBehind: true,
-          visible: !isCarEdition,
+          drawBehind: !isCarEdition,
+          visible: true,
           style: getStatusBarStyle(theme.isDark),
           backgroundColor: 'transparent',
         },
         navigationBar: {
-          visible: !isCarEdition,
+          visible: true,
           backgroundColor: theme['c-content-background'],
         },
         // animations: {
@@ -128,13 +128,13 @@ export const showSyncModeModal = () => {
           interceptTouchOutside: true,
         },
         statusBar: {
-          drawBehind: true,
-          visible: !isCarEdition,
+          drawBehind: !isCarEdition,
+          visible: true,
           style: getStatusBarStyle(theme.isDark),
           backgroundColor: 'transparent',
         },
         navigationBar: {
-          visible: !isCarEdition,
+          visible: true,
           backgroundColor: theme['c-content-background'],
         },
         // animations: {

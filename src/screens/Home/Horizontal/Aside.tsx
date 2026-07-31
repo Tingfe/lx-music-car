@@ -124,7 +124,13 @@ export default memo(() => {
   // console.log('render drawer nav')
   const showBackBtn = useSettingValue('common.showBackBtn')
   const showExitBtn = useSettingValue('common.showExitBtn')
-  const primaryMenus = isCarEdition ? NAV_MENUS.filter(menu => menu.id != 'nav_setting') : NAV_MENUS
+  // The car sidebar cannot safely scroll while driving. Keep the three core
+  // destinations visible instead of letting "我的列表" be clipped below the
+  // fold on lower-height OEM windows; the leaderboard remains available on
+  // the phone edition.
+  const primaryMenus = isCarEdition
+    ? NAV_MENUS.filter(menu => menu.id != 'nav_setting' && menu.id != 'nav_top')
+    : NAV_MENUS
   const settingMenu = isCarEdition ? NAV_MENUS.find(menu => menu.id == 'nav_setting') : null
 
   const handlePress = (id: IdType) => {

@@ -67,13 +67,13 @@ export async function pushHomeScreen() {
                 drawBehind: false,
               },
               statusBar: {
-                drawBehind: true,
-                visible: !isCarEdition,
+                drawBehind: !isCarEdition,
+                visible: true,
                 style: getStatusBarStyle(theme.isDark),
                 backgroundColor: 'transparent',
               },
               navigationBar: {
-                visible: !isCarEdition,
+                visible: true,
                 backgroundColor: theme['c-content-background'],
               },
               layout: {
@@ -132,13 +132,13 @@ export function pushPlayDetailScreen(componentId: string, skipAnimation = false)
             drawBehind: false,
           },
           statusBar: {
-            drawBehind: true,
-            visible: !isCarEdition,
+            drawBehind: !isCarEdition,
+            visible: true,
             style: getStatusBarStyle(theme.isDark),
             backgroundColor: 'transparent',
           },
           navigationBar: {
-            visible: !isCarEdition,
+            visible: true,
             backgroundColor: theme['c-content-background'],
           },
           layout: {
@@ -217,13 +217,13 @@ export function pushSonglistDetailScreen(componentId: string, info: ListInfoItem
             drawBehind: false,
           },
           statusBar: {
-            drawBehind: true,
-            visible: !isCarEdition,
+            drawBehind: !isCarEdition,
+            visible: true,
             style: getStatusBarStyle(theme.isDark),
             backgroundColor: 'transparent',
           },
           navigationBar: {
-            visible: !isCarEdition,
+            visible: true,
             backgroundColor: theme['c-content-background'],
           },
           layout: {
@@ -350,13 +350,13 @@ export function pushCommentScreen(componentId: string) {
             drawBehind: false,
           },
           statusBar: {
-            drawBehind: true,
-            visible: !isCarEdition,
+            drawBehind: !isCarEdition,
+            visible: true,
             style: getStatusBarStyle(theme.isDark),
             backgroundColor: 'transparent',
           },
           navigationBar: {
-            visible: !isCarEdition,
+            visible: true,
             backgroundColor: theme['c-content-background'],
           },
           layout: {
