@@ -73,7 +73,7 @@ export async function pushHomeScreen() {
                 backgroundColor: 'transparent',
               },
               navigationBar: {
-                visible: true,
+                visible: !isCarEdition,
                 backgroundColor: theme['c-content-background'],
               },
               layout: {
@@ -138,7 +138,7 @@ export function pushPlayDetailScreen(componentId: string, skipAnimation = false)
             backgroundColor: 'transparent',
           },
           navigationBar: {
-            visible: true,
+            visible: !isCarEdition,
             backgroundColor: theme['c-content-background'],
           },
           layout: {
@@ -223,7 +223,7 @@ export function pushSonglistDetailScreen(componentId: string, info: ListInfoItem
             backgroundColor: 'transparent',
           },
           navigationBar: {
-            visible: true,
+            visible: !isCarEdition,
             backgroundColor: theme['c-content-background'],
           },
           layout: {
@@ -356,7 +356,7 @@ export function pushCommentScreen(componentId: string) {
             backgroundColor: 'transparent',
           },
           navigationBar: {
-            visible: true,
+            visible: !isCarEdition,
             backgroundColor: theme['c-content-background'],
           },
           layout: {

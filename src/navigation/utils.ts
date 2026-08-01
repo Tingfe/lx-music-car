@@ -36,7 +36,7 @@ export const showPactModal = () => {
           backgroundColor: 'transparent',
         },
         navigationBar: {
-          visible: true,
+          visible: !isCarEdition,
           backgroundColor: theme['c-content-background'],
         },
         // animations: {
@@ -85,7 +85,7 @@ export const showVersionModal = () => {
           backgroundColor: 'transparent',
         },
         navigationBar: {
-          visible: true,
+          visible: !isCarEdition,
           backgroundColor: theme['c-content-background'],
         },
         // animations: {
@@ -134,7 +134,7 @@ export const showSyncModeModal = () => {
           backgroundColor: 'transparent',
         },
         navigationBar: {
-          visible: true,
+          visible: !isCarEdition,
           backgroundColor: theme['c-content-background'],
         },
         // animations: {
