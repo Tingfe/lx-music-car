@@ -31,7 +31,7 @@ export const showPactModal = () => {
         },
         statusBar: {
           drawBehind: !isCarEdition,
-          visible: true,
+          visible: !isCarEdition,
           style: getStatusBarStyle(theme.isDark),
           backgroundColor: 'transparent',
         },
@@ -80,7 +80,7 @@ export const showVersionModal = () => {
         },
         statusBar: {
           drawBehind: !isCarEdition,
-          visible: true,
+          visible: !isCarEdition,
           style: getStatusBarStyle(theme.isDark),
           backgroundColor: 'transparent',
         },
@@ -129,7 +129,7 @@ export const showSyncModeModal = () => {
         },
         statusBar: {
           drawBehind: !isCarEdition,
-          visible: true,
+          visible: !isCarEdition,
           style: getStatusBarStyle(theme.isDark),
           backgroundColor: 'transparent',
         },
