@@ -66,6 +66,6 @@ const styles = createStyle({
     paddingLeft: 12,
     paddingRight: 12,
     minWidth: isCarEdition ? 92 : undefined,
-    height: isCarEdition ? 72 : undefined,
+    height: isCarEdition ? 56 : undefined,
   },
 })

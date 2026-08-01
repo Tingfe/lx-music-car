@@ -50,7 +50,7 @@ export default forwardRef<HeaderBarType, HeaderBarProps>(({ onSortChange, onTagC
 
 
   return (
-    <View style={{ ...styles.searchBar, height: isCarEdition ? 72 : 38, backgroundColor: isCarEdition ? carTheme.surface : undefined, borderBottomColor: isCarEdition ? carTheme.border : undefined }}>
+    <View style={{ ...styles.searchBar, height: isCarEdition ? 56 : 38, backgroundColor: isCarEdition ? carTheme.surface : undefined, borderBottomColor: isCarEdition ? carTheme.border : undefined }}>
       <SortTab ref={sortTabRef} onSortChange={onSortChange} />
       <Tag ref={tagRef} onTagChange={onTagChange} />
       <OpenList ref={openListRef} />

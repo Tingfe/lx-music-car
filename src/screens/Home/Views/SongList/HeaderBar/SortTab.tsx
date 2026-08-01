@@ -71,7 +71,7 @@ const styles = createStyle({
     paddingLeft: 14,
     paddingRight: 14,
     minWidth: isCarEdition ? 92 : undefined,
-    height: isCarEdition ? 72 : undefined,
+    height: isCarEdition ? 56 : undefined,
     // width: 80,
     // backgroundColor: 'rgba(0,0,0,0.1)',
   },

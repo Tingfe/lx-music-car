@@ -22,7 +22,7 @@ const headerComponents: Partial<Record<CommonState['navActiveId'], React.ReactNo
   nav_search: <SearchTypeSelector />,
 }
 
-const HEADER_HEIGHT = isCarEdition ? 72 : _HEADER_HEIGHT * 0.8
+const HEADER_HEIGHT = isCarEdition ? 52 : _HEADER_HEIGHT * 0.8
 
 const ThemeToggle = () => {
   const theme = useTheme()
@@ -35,8 +35,8 @@ const ThemeToggle = () => {
       style={styles.themeToggle}
       activeOpacity={0.6}
       onPress={() => { setTheme(theme.isDark ? lightThemeId : darkThemeId) }}>
-      <Icon name="setting" size={isCarEdition ? 26 : 18} color={isCarEdition ? carTheme.accent : theme['c-font']} />
-      <Text size={isCarEdition ? 16 : 13} color={isCarEdition ? carTheme.text : theme['c-font']}>{theme.isDark ? '深色' : '浅色'}</Text>
+      <Icon name="setting" size={isCarEdition ? 20 : 18} color={isCarEdition ? carTheme.accent : theme['c-font']} />
+      <Text size={isCarEdition ? 14 : 13} color={isCarEdition ? carTheme.text : theme['c-font']}>{theme.isDark ? '深色' : '浅色'}</Text>
     </TouchableOpacity>
   )
 }
@@ -64,7 +64,7 @@ const LeftHeader = () => {
       paddingTop: statusBarHeight,
     }}>
       <View style={styles.left}>
-        <Text style={styles.leftTitle} size={isCarEdition ? 24 : 18} color={isCarEdition ? carTheme.text : undefined}>{t(id)}</Text>
+        <Text style={styles.leftTitle} size={isCarEdition ? 20 : 18} color={isCarEdition ? carTheme.text : undefined}>{t(id)}</Text>
       </View>
       {headerComponents[id] ?? null}
       <ThemeToggle />
@@ -99,7 +99,7 @@ const RightHeader = () => {
       paddingTop: statusBarHeight,
     }}>
       <View style={styles.left}>
-        <Text style={styles.rightTitle} size={isCarEdition ? 24 : 18} color={isCarEdition ? carTheme.text : undefined}>{t(id)}</Text>
+        <Text style={styles.rightTitle} size={isCarEdition ? 20 : 18} color={isCarEdition ? carTheme.text : undefined}>{t(id)}</Text>
       </View>
       {headerComponents[id] ?? null}
       <ThemeToggle />
@@ -161,17 +161,17 @@ const styles = createStyle({
     justifyContent: 'center',
   },
   leftTitle: {
-    paddingLeft: isCarEdition ? 24 : 10,
+    paddingLeft: isCarEdition ? 18 : 10,
     paddingRight: 16,
   },
   rightTitle: {
-    paddingLeft: isCarEdition ? 24 : 16,
+    paddingLeft: isCarEdition ? 18 : 16,
     paddingRight: 16,
   },
   themeToggle: {
     height: '100%',
-    minWidth: isCarEdition ? 112 : 66,
-    paddingHorizontal: 10,
+    minWidth: isCarEdition ? 84 : 66,
+    paddingHorizontal: 8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

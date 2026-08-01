@@ -39,7 +39,7 @@ const styles = createStyle({
     paddingRight: 15,
     justifyContent: 'center',
     minWidth: isCarEdition ? 92 : undefined,
-    height: isCarEdition ? 72 : undefined,
+    height: isCarEdition ? 56 : undefined,
   },
   sourceMenu: {
     // height: 38,

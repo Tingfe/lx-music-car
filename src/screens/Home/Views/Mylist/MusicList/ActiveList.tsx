@@ -78,7 +78,7 @@ const styles = createStyle({
   currentList: {
     flexDirection: 'row',
     paddingRight: 2,
-    height: isCarEdition ? 60 : 36,
+    height: isCarEdition ? 56 : 36,
     alignItems: 'center',
     borderBottomWidth: BorderWidths.normal,
     // backgroundColor: 'rgba(0,0,0,0.2)',
