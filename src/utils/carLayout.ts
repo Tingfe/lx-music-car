@@ -7,6 +7,7 @@ export const CAR_LAYOUT = {
   gutter: 16,
   gap: 16,
   playlistMinWidth: 300,
+  playlistRowHeight: 76,
   playlistHeight: 112,
   playlistCover: 96,
   playerHeight: 124,

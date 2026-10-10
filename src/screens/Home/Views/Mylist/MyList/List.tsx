@@ -15,12 +15,13 @@ import { scaleSizeH } from '@/utils/pixelRatio'
 import Loading from '@/components/common/Loading'
 import { isCarEdition } from '@/utils/nativeModules/utils'
 import { getCarTheme } from '@/theme/car'
+import { CAR_LAYOUT } from '@/utils/carLayout'
 
 type FlatListType = FlatListProps<LX.List.MyListInfo>
 
-const ITEM_HEIGHT = scaleSizeH(isCarEdition ? 64 : 40)
+const ITEM_HEIGHT = isCarEdition ? CAR_LAYOUT.playlistRowHeight : scaleSizeH(40)
 
-const ListItem = memo(({ item, index, activeId, onPress, onShowMenu }: {
+export const ListItem = memo(({ item, index, activeId, onPress, onShowMenu }: {
   onPress: (item: LX.List.MyListInfo) => void
   index: number
   activeId: string
@@ -48,17 +49,17 @@ const ListItem = memo(({ item, index, activeId, onPress, onShowMenu }: {
   }
 
   return (
-    <View style={{ ...styles.listItem, height: ITEM_HEIGHT, borderBottomColor: isCarEdition ? carTheme.border : 'transparent' }}>
+    <View style={{ ...styles.listItem, height: ITEM_HEIGHT, backgroundColor: isCarEdition ? (active ? carTheme.active : carTheme.surface) : undefined, borderBottomColor: isCarEdition ? carTheme.border : 'transparent' }}>
       {
         active
           ? <Icon style={styles.listActiveIcon} name="chevron-right" size={isCarEdition ? 18 : 12} color={isCarEdition ? carTheme.accent : theme['c-primary-font']} />
           : null
       }
       { fetching ? <Loading color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-font']) : (isCarEdition ? carTheme.text : theme['c-font'])} style={styles.loading} /> : null }
-      <TouchableOpacity style={styles.listName} onPress={handlePress}>
-        <Text size={isCarEdition ? 17 : undefined} numberOfLines={1} color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-font']) : (isCarEdition ? carTheme.text : theme['c-font'])}>{item.name}</Text>
+      <TouchableOpacity style={styles.listName} accessibilityRole="button" accessibilityLabel={`选择歌单，${item.name}`} accessibilityState={{ selected: active }} onPress={handlePress}>
+        <Text size={isCarEdition ? 20 : undefined} numberOfLines={1} color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-font']) : (isCarEdition ? carTheme.text : theme['c-font'])}>{item.name}</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleShowMenu} ref={moreButtonRef} style={styles.listMoreBtn}>
+      <TouchableOpacity accessibilityRole="button" accessibilityLabel={`${item.name}，更多操作`} onPress={handleShowMenu} ref={moreButtonRef} style={styles.listMoreBtn}>
         <Icon name="dots-vertical" color={isCarEdition ? carTheme.iconMuted : theme['c-350']} size={isCarEdition ? 18 : 12} />
       </TouchableOpacity>
     </View>
@@ -165,6 +166,7 @@ const styles = createStyle({
     marginLeft: 5,
   },
   listName: {
+    minWidth: isCarEdition ? 0 : undefined,
     height: '100%',
     // height: 46,
     // paddingTop: 12,
@@ -181,7 +183,7 @@ const styles = createStyle({
   // },
   listMoreBtn: {
     height: '100%',
-    width: isCarEdition ? 56 : 36,
+    width: isCarEdition ? CAR_LAYOUT.touchSize : 36,
     // height: 46,
     // paddingTop: 12,
     // paddingBottom: 12,

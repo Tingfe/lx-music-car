@@ -1,7 +1,7 @@
 {
   "name": "lx-music-car",
-  "version": "1.8.28",
-  "versionCode": 100,
+  "version": "1.8.29",
+  "versionCode": 101,
   "private": true,
   "scripts": {
     "test:privacy": "node --test tests/privacy.test.cjs",

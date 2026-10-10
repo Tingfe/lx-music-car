@@ -37,6 +37,10 @@ const createRenderer = ({ dark = true, width = 800, hasMusic = true, fontSize = 
     '@/components/common/Image': 'Image',
     '@/components/common/Icon': { Icon: 'Icon' },
     '@/components/common/Badge': 'Badge',
+    '@/components/common/Loading': 'Loading',
+    '@/store/list/hook': { useListFetching: () => false, useMyList: () => [], useActiveListId: () => '' },
+    '@/utils/data': { getListPosition: async() => 0, saveListPosition: async() => {} },
+    '@/core/list': { setActiveList: noop },
     '@/store/theme/hook': { useTheme: () => ({ isDark: dark }) },
     '@/store/common/hook': { usePageVisible: noop, useNavActiveId: () => 'nav_love', useStatusbarHeight: () => 0, useAssertApiSupport: () => true },
     '@/store/player/hook': { usePlayerMusicInfo: () => music, useIsPlay: () => true, useStatusText: () => '正在播放', useProgress: () => ({ nowPlayTimeStr: '01:28', maxPlayTimeStr: '04:32', progress: 0.32, maxPlayTime: 272 }) },
@@ -88,7 +92,7 @@ const createRenderer = ({ dark = true, width = 800, hasMusic = true, fontSize = 
     if (typeof node.type === 'function') return expand(node.type(node.props))
     return { type: node.type, props: { ...node.props, children: expand(node.props.children) } }
   }
-  const render = (file, props = {}) => expand(jsx(load(file).default, props))
+  const render = (file, props = {}, exportName = 'default') => expand(jsx(load(file)[exportName], props))
   return { render, load, calls, music }
 }
 

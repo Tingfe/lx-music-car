@@ -82,6 +82,22 @@ test('actual song row keeps playback and more actions in separate large targets'
   }
 })
 const contrast = (a, b) => (Math.max(luminance(a), luminance(b)) + 0.05) / (Math.min(luminance(a), luminance(b)) + 0.05)
+
+test('local playlist selector shares large targets and selected theme feedback', () => {
+  for (const dark of [false, true]) {
+    const renderer = createRenderer({ dark })
+    const item = { id: 'fixture', name: '我的收藏与自建歌单' }
+    const tree = renderer.render('src/screens/Home/Views/Mylist/MyList/List.tsx', {
+      item, index: 0, activeId: item.id, onPress: () => {}, onShowMenu: () => {},
+    }, 'ListItem')
+    assert.equal(flattenStyle(tree.props.style).height, 76)
+    assert.equal(flattenStyle(tree.props.style).backgroundColor, getCarTheme(dark).active)
+    const buttons = nodes(tree).filter(node => node.type === 'TouchableOpacity')
+    assert.equal(flattenStyle(buttons[1].props.style).width, 76)
+    assert.equal(buttons[0].props.accessibilityState.selected, true)
+    assert.equal(nodes(tree).find(node => node.props.children === item.name).props.size, 20)
+  }
+})
 test('day and night text and primary playback control retain readable contrast', () => {
   for (const dark of [false, true]) {
     const colors = getCarTheme(dark)
