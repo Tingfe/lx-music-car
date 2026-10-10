@@ -16,7 +16,7 @@ import { isCarEdition } from '@/utils/nativeModules/utils'
 import { getCarTheme } from '@/theme/car'
 
 const NAV_WIDTH = isCarEdition ? 150 : 68
-const MENU_HEIGHT = isCarEdition ? 72 : undefined
+const MENU_HEIGHT = isCarEdition ? 76 : undefined
 
 const styles = createStyle({
   container: {
@@ -30,8 +30,9 @@ const styles = createStyle({
     width: NAV_WIDTH,
   },
   header: {
-    paddingTop: isCarEdition ? 18 : 15,
-    paddingBottom: isCarEdition ? 18 : 15,
+    height: isCarEdition ? 44 : undefined,
+    paddingTop: isCarEdition ? 0 : 15,
+    paddingBottom: isCarEdition ? 0 : 15,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -47,6 +48,7 @@ const styles = createStyle({
     paddingBottom: isCarEdition ? 8 : 15,
   },
   utilityArea: {
+    flexDirection: isCarEdition ? 'row' : 'column',
     borderTopWidth: BorderWidths.normal,
     paddingTop: isCarEdition ? 6 : 0,
   },
@@ -64,13 +66,15 @@ const styles = createStyle({
     minHeight: MENU_HEIGHT,
     paddingTop: 10,
     paddingBottom: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
   carUtilityItem: {
+    flex: 1,
+    flexDirection: 'column',
     minHeight: 48,
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingHorizontal: 24,
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingHorizontal: 0,
   },
   iconContent: {
     // width: 24,
@@ -78,7 +82,8 @@ const styles = createStyle({
     alignItems: 'center',
   },
   text: {
-    paddingLeft: isCarEdition ? 18 : 15,
+    paddingLeft: isCarEdition ? 12 : 15,
+    flexShrink: isCarEdition ? 1 : undefined,
     // fontWeight: '500',
   },
 })
@@ -115,8 +120,8 @@ const MenuItem = ({ id, icon, onPress, tone = 'primary' }: {
   const iconSize = isCarEdition ? (isUtility ? 22 : 32) : 20
   const activeBackground = isCarEdition
     ? isUtility
-      ? { backgroundColor: carTheme.surface, borderLeftWidth: 2, borderLeftColor: carTheme.border, paddingLeft: 22 }
-      : { backgroundColor: carTheme.active, borderLeftWidth: 4, borderLeftColor: carTheme.accent, paddingLeft: 16 }
+      ? { backgroundColor: carTheme.surface, borderBottomWidth: 2, borderBottomColor: carTheme.accent }
+      : { backgroundColor: carTheme.active, borderLeftWidth: 4, borderLeftColor: carTheme.accent, paddingLeft: 12 }
     : null
 
   return activeId == id
@@ -124,13 +129,13 @@ const MenuItem = ({ id, icon, onPress, tone = 'primary' }: {
         <View style={styles.iconContent}>
           <Icon name={icon} size={iconSize} color={isCarEdition ? carTheme.accent : theme['c-primary-font-active']} />
         </View>
-        {isCarEdition ? <Text style={styles.text} size={isUtility ? 14 : 17} color={carTheme.text}>{t(id)}</Text> : null}
+        {isCarEdition ? <Text style={[styles.text, isUtility ? { paddingLeft: 0, marginTop: 2 } : null]} numberOfLines={2} size={isUtility ? 12 : 16} color={carTheme.text}>{t(id)}</Text> : null}
       </View>
     : <TouchableOpacity style={itemStyle} onPress={() => { onPress(id) }}>
         <View style={styles.iconContent}>
           <Icon name={icon} size={iconSize} color={isCarEdition ? carTheme.iconMuted : theme['c-font-label']} />
         </View>
-        {isCarEdition ? <Text style={styles.text} size={isUtility ? 14 : 17} color={carTheme.textMuted}>{t(id)}</Text> : null}
+        {isCarEdition ? <Text style={[styles.text, isUtility ? { paddingLeft: 0, marginTop: 2 } : null]} numberOfLines={2} size={isUtility ? 12 : 16} color={carTheme.textMuted}>{t(id)}</Text> : null}
       </TouchableOpacity>
 }
 

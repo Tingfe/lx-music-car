@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ({ isHome }: { isHome: boolean }) => {
+export default ({ isHome, size = PIC_HEIGHT }: { isHome: boolean, size?: number }) => {
   const musicInfo = usePlayerMusicInfo()
   const handlePress = () => {
     // console.log('')
@@ -46,8 +46,8 @@ export default ({ isHome }: { isHome: boolean }) => {
   }, [])
 
   return (
-    <TouchableOpacity onLongPress={handleLongPress} onPress={handlePress} activeOpacity={0.7} >
-      <Image url={musicInfo.pic} nativeID={NAV_SHEAR_NATIVE_IDS.playDetail_pic} style={styles.image} onError={handleError} />
+    <TouchableOpacity accessibilityRole="button" accessibilityLabel="打开播放详情" accessibilityState={{ disabled: isCarEdition && !musicInfo.id }} disabled={isCarEdition && !musicInfo.id} onLongPress={handleLongPress} onPress={handlePress} activeOpacity={0.7} >
+      <Image url={musicInfo.pic} nativeID={NAV_SHEAR_NATIVE_IDS.playDetail_pic} style={[styles.image, { width: size, height: size, borderRadius: isCarEdition ? 10 : 2 }]} onError={handleError} />
     </TouchableOpacity>
   )
 }

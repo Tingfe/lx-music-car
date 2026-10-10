@@ -11,8 +11,9 @@ import Text from '@/components/common/Text'
 import Badge from '@/components/common/Badge'
 import { isCarEdition } from '@/utils/nativeModules/utils'
 import { getCarTheme } from '@/theme/car'
+import { CAR_LAYOUT } from '@/utils/carLayout'
 
-export const ITEM_HEIGHT = scaleSizeH(LIST_ITEM_HEIGHT)
+export const ITEM_HEIGHT = isCarEdition ? CAR_LAYOUT.songHeight : scaleSizeH(LIST_ITEM_HEIGHT)
 
 
 export default memo(({ item, index, activeIndex, onPress, onShowMenu, onLongPress, selectedList, rowInfo, isShowAlbumName, isShowInterval }: {
@@ -47,8 +48,8 @@ export default memo(({ item, index, activeIndex, onPress, onShowMenu, onLongPres
   const singer = `${item.singer}${isShowAlbumName && item.meta.albumName ? ` · ${item.meta.albumName}` : ''}`
 
   return (
-    <View style={{ ...styles.listItem, width: rowInfo.rowWidth, height: ITEM_HEIGHT, backgroundColor: isSelected ? theme['c-primary-background-hover'] : 'rgba(0,0,0,0)', borderBottomColor: isCarEdition ? carTheme.border : 'transparent', opacity: isSupported ? 1 : 0.5 }}>
-      <TouchableOpacity style={styles.listItemLeft} onPress={() => { onPress(item, index) }} onLongPress={() => { onLongPress(item, index) }}>
+    <View style={{ ...styles.listItem, width: rowInfo.rowWidth, height: ITEM_HEIGHT, backgroundColor: isCarEdition ? (isSelected || active ? carTheme.active : carTheme.page) : (isSelected ? theme['c-primary-background-hover'] : 'rgba(0,0,0,0)'), borderBottomColor: isCarEdition ? carTheme.border : 'transparent', opacity: isCarEdition || isSupported ? 1 : 0.5 }}>
+      <TouchableOpacity style={styles.listItemLeft} accessibilityRole="button" accessibilityLabel={`${item.name}，${item.singer}，播放`} onPress={() => { onPress(item, index) }} onLongPress={() => { onLongPress(item, index) }}>
         {
           active
             ? <Icon style={styles.sn} name="play-outline" size={isCarEdition ? 19 : 13} color={isCarEdition ? carTheme.accent : theme['c-primary-font']} />
@@ -56,23 +57,23 @@ export default memo(({ item, index, activeIndex, onPress, onShowMenu, onLongPres
         }
         <View style={styles.itemInfo}>
           {/* <View style={styles.listItemTitle}> */}
-          <Text size={isCarEdition ? 17 : undefined} color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-font']) : (isCarEdition ? carTheme.text : theme['c-font'])} numberOfLines={1}>{item.name}</Text>
+          <Text size={isCarEdition ? CAR_LAYOUT.titleSize : undefined} style={isCarEdition ? { fontWeight: '500' } : undefined} color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-font']) : (isCarEdition ? carTheme.text : theme['c-font'])} numberOfLines={1}>{item.name}</Text>
           {/* </View> */}
           <View style={styles.listItemSingle}>
-            <Badge>{item.source.toUpperCase()}</Badge>
-            <Text style={styles.listItemSingleText} size={isCarEdition ? 13 : 11} color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-alpha-200']) : (isCarEdition ? carTheme.textMuted : theme['c-500'])} numberOfLines={1}>
-              {singer}
+            {!isCarEdition ? <Badge>{item.source.toUpperCase()}</Badge> : null}
+            <Text style={styles.listItemSingleText} size={isCarEdition ? CAR_LAYOUT.subtitleSize : 11} color={isCarEdition ? carTheme.textMuted : (active ? theme['c-primary-alpha-200'] : theme['c-500'])} numberOfLines={1}>
+              {isCarEdition && !isSupported ? `音源不可用 · ${singer}` : singer}
             </Text>
           </View>
         </View>
         {
           isShowInterval ? (
-            <Text size={isCarEdition ? 14 : 12} color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-alpha-400']) : (isCarEdition ? carTheme.iconMuted : theme['c-250'])} numberOfLines={1}>{item.interval}</Text>
+            <Text style={isCarEdition ? { paddingLeft: 8, flexShrink: 0 } : undefined} size={isCarEdition ? 16 : 12} color={active ? (isCarEdition ? carTheme.accent : theme['c-primary-alpha-400']) : (isCarEdition ? carTheme.iconMuted : theme['c-250'])} numberOfLines={1}>{item.interval}</Text>
           ) : null
         }
       </TouchableOpacity>
       {/* <View style={styles.listItemRight}> */}
-      <TouchableOpacity onPress={handleShowMenu} ref={moreButtonRef} style={styles.moreButton}>
+      <TouchableOpacity accessibilityRole="button" accessibilityLabel={`${item.name}，更多操作`} onPress={handleShowMenu} ref={moreButtonRef} style={styles.moreButton}>
         <Icon name="dots-vertical" style={{ color: isCarEdition ? carTheme.iconMuted : theme['c-350'] }} size={isCarEdition ? 18 : 12} />
       </TouchableOpacity>
       {/* </View> */}
@@ -83,6 +84,7 @@ export default memo(({ item, index, activeIndex, onPress, onShowMenu, onLongPres
     prevProps.index === nextProps.index &&
     prevProps.isShowAlbumName === nextProps.isShowAlbumName &&
     prevProps.isShowInterval === nextProps.isShowInterval &&
+    prevProps.rowInfo.rowWidth === nextProps.rowInfo.rowWidth &&
     prevProps.activeIndex != nextProps.index &&
     nextProps.activeIndex != nextProps.index &&
     nextProps.selectedList.includes(nextProps.item) == prevProps.selectedList.includes(nextProps.item)
@@ -101,6 +103,7 @@ const styles = createStyle({
     borderBottomWidth: isCarEdition ? 1 : 0,
   },
   listItemLeft: {
+    height: isCarEdition ? '100%' : undefined,
     flex: 1,
     flexGrow: 1,
     flexShrink: 1,
@@ -116,6 +119,7 @@ const styles = createStyle({
     paddingRight: 3,
   },
   itemInfo: {
+    minWidth: isCarEdition ? 0 : undefined,
     flexGrow: 1,
     flexShrink: 1,
     // paddingTop: 10,
@@ -135,7 +139,7 @@ const styles = createStyle({
     // backgroundColor: 'rgba(0,0,0,0.2)',
     flexGrow: 0,
     flexShrink: 1,
-    fontWeight: '300',
+    fontWeight: isCarEdition ? '400' : '300',
     // fontSize: 15,
   },
   // listItemBadge: {
@@ -152,6 +156,8 @@ const styles = createStyle({
   },
 
   moreButton: {
+    width: isCarEdition ? CAR_LAYOUT.touchSize : undefined,
+    alignItems: 'center',
     height: '100%',
     paddingLeft: 16,
     paddingRight: 16,

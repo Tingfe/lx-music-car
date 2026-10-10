@@ -1,10 +1,11 @@
 {
   "name": "lx-music-car",
-  "version": "1.8.27",
-  "versionCode": 99,
+  "version": "1.8.28",
+  "versionCode": 100,
   "private": true,
   "scripts": {
     "test:privacy": "node --test tests/privacy.test.cjs",
+    "test:car-ui": "node --test tests/car-ui.test.cjs",
     "dev": "react-native run-android --active-arch-only",
     "ios": "react-native run-ios",
     "start": "react-native start",

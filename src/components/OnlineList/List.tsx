@@ -13,6 +13,9 @@ import { useI18n } from '@/lang'
 import Text from '@/components/common/Text'
 import { handlePlay } from './listAction'
 import { useSettingValue } from '@/store/setting/hook'
+import { useLayout } from '@/utils/hooks'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarMusicRows } from '@/utils/carLayout'
 
 type FlatListType = FlatListProps<LX.Music.MusicInfoOnline>
 
@@ -68,7 +71,9 @@ const List = forwardRef<ListType, ListProps>(({
   const selectedListRef = useRef<LX.Music.MusicInfoOnline[]>([])
   const [visibleMultiSelect, setVisibleMultiSelect] = useState(false)
   const [status, setStatus] = useState<Status>('idle')
+  const { onLayout, width } = useLayout()
   const rowInfo = useRef(getRowInfo(rowType))
+  if (isCarEdition) rowInfo.current = getCarMusicRows(width)
   const isShowAlbumName = useSettingValue('list.isShowAlbumName')
   const isShowInterval = useSettingValue('list.isShowInterval')
   // const currentListIdRef = useRef('')
@@ -230,7 +235,9 @@ const List = forwardRef<ListType, ListProps>(({
   }, [onLoadMore, status, visibleMultiSelect])
 
   return (
+    <View style={styles.container} onLayout={isCarEdition ? onLayout : undefined}>
     <FlatList
+      key={rowInfo.current.rowNum ?? 1}
       ref={flatListRef}
       style={styles.list}
       data={currentList}
@@ -253,6 +260,7 @@ const List = forwardRef<ListType, ListProps>(({
       refreshControl={refreshControl}
       ListFooterComponent={footerComponent}
     />
+    </View>
   )
 })
 

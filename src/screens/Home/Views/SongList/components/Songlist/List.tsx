@@ -10,6 +10,9 @@ import { useI18n } from '@/lang'
 import { scaleSizeW } from '@/utils/pixelRatio'
 import { createStyle } from '@/utils/tools'
 import Text from '@/components/common/Text'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { CAR_LAYOUT, getCarPlaylistGrid } from '@/utils/carLayout'
+import { getCarTheme } from '@/theme/car'
 
 type FlatListType = FlatListProps<ListInfoItem>
 
@@ -112,6 +115,7 @@ export default forwardRef<ListType, ListProps>(({ onRefresh, onLoadMore, onOpenD
   // console.log(Math.trunc(width * 0.125), itemWidth)
   // console.log(itemWidth, MIN_WIDTH, GAP, width)
   const rowInfo = useMemo(() => {
+    if (isCarEdition) return getCarPlaylistGrid(width)
     let w = width - GAP
     let n = width / (MIN_WIDTH + GAP)
     if (n > 10) n = 10
@@ -153,7 +157,8 @@ export default forwardRef<ListType, ListProps>(({ onRefresh, onLoadMore, onOpenD
                 key={String(rowInfo.num)}
                 ref={flatListRef}
                 style={styles.list}
-                columnWrapperStyle={{ justifyContent: 'space-evenly' }}
+                contentContainerStyle={isCarEdition ? { padding: CAR_LAYOUT.gutter } : undefined}
+                columnWrapperStyle={rowInfo.num > 1 ? (isCarEdition ? { gap: CAR_LAYOUT.gap } : { justifyContent: 'space-evenly' }) : undefined}
                 numColumns={rowInfo.num}
                 data={list}
                 maxToRenderPerBatch={4}
@@ -183,6 +188,7 @@ const Footer = ({ label, onLoadMore }: {
   onLoadMore: () => void
 }) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const t = useI18n()
   const handlePress = () => {
     if (label != 'list_error') return
@@ -192,7 +198,7 @@ const Footer = ({ label, onLoadMore }: {
     label
       ? (
           <View>
-            <Text onPress={handlePress} style={styles.footer} color={theme['c-font-label']}>{t(label)}</Text>
+            <Text onPress={handlePress} style={styles.footer} size={isCarEdition ? 18 : undefined} color={isCarEdition ? carTheme.textMuted : theme['c-font-label']}>{t(label)}</Text>
           </View>
         )
       : null
@@ -207,8 +213,8 @@ const styles = createStyle({
   },
   list: {
     flex: 1,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: isCarEdition ? 0 : 10,
+    paddingRight: isCarEdition ? 0 : 10,
   },
   footer: {
     textAlign: 'center',

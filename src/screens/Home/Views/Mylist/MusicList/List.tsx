@@ -1,6 +1,6 @@
 import { playList } from '@/core/player/player'
 import { useMemo, useRef, useState, useEffect, forwardRef, useImperativeHandle } from 'react'
-import { FlatList, type NativeScrollEvent, type NativeSyntheticEvent, type FlatListProps } from 'react-native'
+import { FlatList, type NativeScrollEvent, type NativeSyntheticEvent, type FlatListProps, View } from 'react-native'
 
 import listState from '@/store/list/state'
 import playerState from '@/store/player/state'
@@ -14,6 +14,9 @@ import type { Position } from './ListMenu'
 import type { SelectMode } from './MultipleModeBar'
 import { useActiveListId } from '@/store/list/hook'
 import { useSettingValue } from '@/store/setting/hook'
+import { useLayout } from '@/utils/hooks'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { getCarMusicRows } from '@/utils/carLayout'
 
 type FlatListType = FlatListProps<LX.Music.MusicInfo>
 
@@ -56,7 +59,9 @@ const List = forwardRef<ListType, ListProps>(({ onShowMenu, onMuiltSelectMode, o
   const selectedListRef = useRef<LX.List.ListMusics>([])
   const currentListIdRef = useRef('')
   const waitJumpListPositionRef = useRef(false)
+  const { onLayout, width } = useLayout()
   const rowInfo = useRef(getRowInfo())
+  if (isCarEdition) rowInfo.current = getCarMusicRows(width)
   const isShowAlbumName = useSettingValue('list.isShowAlbumName')
   const isShowInterval = useSettingValue('list.isShowInterval')
   // console.log('render music list')
@@ -269,7 +274,9 @@ const List = forwardRef<ListType, ListProps>(({ onShowMenu, onMuiltSelectMode, o
   }
 
   return (
+    <View style={styles.container} onLayout={isCarEdition ? onLayout : undefined}>
     <FlatList
+      key={rowInfo.current.rowNum ?? 1}
       ref={flatListRef}
       onScroll={handleScroll}
       style={styles.list}
@@ -286,6 +293,7 @@ const List = forwardRef<ListType, ListProps>(({ onShowMenu, onMuiltSelectMode, o
       extraData={activeIndex}
       getItemLayout={getItemLayout}
     />
+    </View>
   )
 })
 

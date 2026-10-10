@@ -12,6 +12,7 @@ import { useTheme } from '@/store/theme/hook'
 import { useSettingValue } from '@/store/setting/hook'
 import { isCarEdition } from '@/utils/nativeModules/utils'
 import { getCarTheme } from '@/theme/car'
+import CarPlayerBar from './CarPlayerBar'
 
 
 export default memo(({ isHome = false }: { isHome?: boolean }) => {
@@ -44,7 +45,7 @@ export default memo(({ isHome = false }: { isHome?: boolean }) => {
 
   // console.log('render pb')
 
-  return autoHidePlayBar && keyboardShown ? null : playerComponent
+  return autoHidePlayBar && keyboardShown ? null : (isCarEdition ? <CarPlayerBar isHome={isHome} /> : playerComponent)
 })
 
 

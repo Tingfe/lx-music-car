@@ -7,6 +7,9 @@ import { scaleSizeW } from '@/utils/pixelRatio'
 import { NAV_SHEAR_NATIVE_IDS } from '@/config/constant'
 import { useTheme } from '@/store/theme/hook'
 import Image from '@/components/common/Image'
+import { isCarEdition } from '@/utils/nativeModules/utils'
+import { CAR_LAYOUT } from '@/utils/carLayout'
+import { getCarTheme } from '@/theme/car'
 
 const gap = scaleSizeW(15)
 export default memo(({ item, index, width, showSource, onPress }: {
@@ -17,9 +20,28 @@ export default memo(({ item, index, width, showSource, onPress }: {
   onPress: (item: ListInfoItem, index: number) => void
 }) => {
   const theme = useTheme()
+  const carTheme = getCarTheme(theme.isDark)
   const itemWidth = width - gap
   const handlePress = () => {
     onPress(item, index)
+  }
+  if (isCarEdition) {
+    if (!item.source) return <View style={{ width }} />
+    return (
+      <TouchableOpacity
+        activeOpacity={0.72}
+        accessibilityRole="button"
+        accessibilityLabel={`打开歌单，${item.name}`}
+        onPress={handlePress}
+        style={{ width, minHeight: CAR_LAYOUT.playlistHeight, marginBottom: CAR_LAYOUT.gap, padding: 8, borderRadius: 12, borderWidth: 1, borderColor: carTheme.border, backgroundColor: carTheme.surface, flexDirection: 'row', alignItems: 'center' }}
+      >
+        <Image url={item.img} nativeID={`${NAV_SHEAR_NATIVE_IDS.songlistDetail_pic}_from_${item.id}`} style={{ width: CAR_LAYOUT.playlistCover, height: CAR_LAYOUT.playlistCover, borderRadius: 8 }} />
+        <View style={{ flex: 1, minWidth: 0, paddingLeft: 12, paddingRight: 4 }}>
+          <Text size={20} style={{ fontWeight: '500', marginBottom: 8 }} color={carTheme.text} numberOfLines={2}>{item.name}</Text>
+          <Text size={16} color={carTheme.textMuted} numberOfLines={1}>{showSource ? item.source.toUpperCase() : (item.author || '查看歌单')}</Text>
+        </View>
+      </TouchableOpacity>
+    )
   }
   return (
     item.source

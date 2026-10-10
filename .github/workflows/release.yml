@@ -36,6 +36,9 @@ jobs:
       - name: Privacy regression checks
         run: npm run test:privacy
 
+      - name: Car layout and interaction regression checks
+        run: npm run test:car-ui
+
       - name: Build standalone car APK
         shell: bash
         run: |
