@@ -23,6 +23,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Create temporary test signing config
+        # Tests must pass before producing a new APK.
         shell: bash
         run: |
           cat > android/keystore.properties <<'EOF'
@@ -31,6 +32,9 @@ jobs:
           keyAlias=androiddebugkey
           keyPassword=android
           EOF
+
+      - name: Privacy regression checks
+        run: npm run test:privacy
 
       - name: Build standalone car APK
         shell: bash
