@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "stable": {
+    "version": "1.8.8",
+    "desc": "**Full Changelog**: https://github.com/Tingfe/lx-music-car/compare/test-v1.8.8-4...v1.8.8",
+    "releaseUrl": "https://github.com/Tingfe/lx-music-car/releases/tag/v1.8.8",
+    "assets": [
+      {
+        "name": "lx-music-car-v1.8.8-car-universal.apk",
+        "browser_download_url": "https://github.com/Tingfe/lx-music-car/releases/download/v1.8.8/lx-music-car-v1.8.8-car-universal.apk"
+      }
+    ]
+  },
+  "preview": {
+    "version": "1.8.31",
+    "desc": "同步上游搜索、歌单、歌曲匹配和歌词修复，保留 Tingfe 同步扩展及 GD 可选接入。\n\n新增单曲播放地址缓存清理，兼容 GD 短期内存缓存；仅提供内置 JavaScript bundle 的 universal APK，无需 Metro。\n\n保留现有车机尺寸体系、深浅色、方向盘播放控制和右侧系统窗口策略。\n\n测试包请先备份歌单后覆盖安装；本轮服务端无需更新。GD 当前仍禁止下载，其他允许下载的音源不受影响。\n\n本版本为测试版，尚需手机/实车及各桌面系统验证。完整范围见仓库 docs/UPSTREAM_SYNC.md。\n",
+    "releaseUrl": "https://github.com/Tingfe/lx-music-car/releases/tag/test-v1.8.31-30",
+    "assets": [
+      {
+        "name": "lx-music-car-v1.8.31-car-universal.apk",
+        "browser_download_url": "https://github.com/Tingfe/lx-music-car/releases/download/test-v1.8.31-30/lx-music-car-v1.8.31-car-universal.apk"
+      }
+    ]
+  }
+}
