@@ -1,6 +1,6 @@
 # LX Music 车机版
 
-`Tingfe/lx-music-car` 是独立维护的 Android 车机应用，不再与手机 APK 共用发布仓库。当前版本为 **1.8.29**。
+`Tingfe/lx-music-car` 是独立维护的 Android 车机应用，不再与手机 APK 共用发布仓库。当前版本为 **1.8.30**。本次新增可选 GD 播放解析，不调整车机尺寸、深浅主题、实体按键或右侧系统窗口策略，详见 [GD 接入说明](GD_STUDIO.md)。
 
 ## 车机交互原则
 

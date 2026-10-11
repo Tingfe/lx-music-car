@@ -39,6 +39,9 @@ jobs:
       - name: Car layout and interaction regression checks
         run: npm run test:car-ui
 
+      - name: GD music source regression checks
+        run: npm run test:gd-studio
+
       - name: Build standalone car APK
         shell: bash
         run: |
@@ -49,7 +52,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lx-music-car-test-${{ github.sha }}
-          path: android/app/build/outputs/apk/car/release/*.apk
+          path: android/app/build/outputs/apk/car/release/*universal.apk
           if-no-files-found: error
 
       - name: Publish test pre-release
@@ -65,8 +68,8 @@ jobs:
             --target "$GITHUB_SHA" \
             --prerelease \
             --title "LX Music 车机测试版 v${VERSION} (${GITHUB_RUN_NUMBER})" \
-            --notes "自动构建的测试签名 APK，内置 JavaScript bundle。请勿将其视为正式签名发布版。" \
-            android/app/build/outputs/apk/car/release/*.apk
+            --notes "新增可选 GD音乐台（网易云·在线播放），支持 128k、320k 和无损请求；请在设置中手动选择。原有搜索、歌单、同步、车机布局及右侧系统窗口策略保持不变。GD 当前禁止下载，其他允许下载的音源不受影响。测试签名 universal APK 内置 JavaScript bundle，无需 Metro；尚需实车验证。详见仓库 docs/GD_STUDIO.md。" \
+            android/app/build/outputs/apk/car/release/*universal.apk
 
       - name: Publish stable release
         if: startsWith(github.ref, 'refs/tags/v')
@@ -80,4 +83,4 @@ jobs:
             --repo "$GITHUB_REPOSITORY" \
             --title "LX Music 车机版 v${VERSION}" \
             --generate-notes \
-            android/app/build/outputs/apk/car/release/*.apk
+            android/app/build/outputs/apk/car/release/*universal.apk
