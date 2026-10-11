@@ -4,7 +4,8 @@
 
 - 下载测试包：[Releases](https://github.com/Tingfe/lx-music-car/releases)
 - 同步服务：[Tingfe/lx-music-sync-server](https://github.com/Tingfe/lx-music-sync-server)
-- 当前版本：`v1.8.31`
+- 当前版本：`v1.8.32`
+- 更新检查修复与维护说明：[docs/UPDATE_CHECK.md](docs/UPDATE_CHECK.md)
 - 包名：`cn.toside.music.mobile.car`
 - 发布包仅提供一个 `universal.apk`。
 

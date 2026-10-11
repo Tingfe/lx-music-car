@@ -20,9 +20,12 @@ export const hideModal = (componentId: string) => {
   void Navigation.dismissOverlay(componentId)
 }
 
+let checkId = 0
 export const checkUpdate = async() => {
-  versionActions.setVersionInfo({ status: 'checking' })
+  const id = ++checkId
+  versionActions.setVersionInfo({ status: 'checking', isLatest: false, isUnknown: false })
   let versionInfo: InitState['versionInfo'] = { ...versionState.versionInfo }
+  let failed = false
   try {
     const { version, desc, history, assets } = await getVersionInfo(settingState.setting['common.isEnablePreReleaseUpdate'])
     versionInfo.newVersion = {
@@ -32,26 +35,22 @@ export const checkUpdate = async() => {
       assets,
     }
   } catch (err) {
-    versionInfo.newVersion = {
-      version: '0.0.0',
-      desc: '',
-      history: [],
-    }
+    failed = true
   }
+  if (id !== checkId) return
   // const versionInfo = {
   //   version: '1.9.0',
   //   desc: '- 更新xxx\n- 修复xxx123的萨达修复xxx123的萨达修复xxx123的萨达修复xxx123的萨达修复xxx123的萨达',
   //   history: [{ version: '1.8.0', desc: '- 更新xxx22\n- 修复xxx22' }, { version: '1.7.0', desc: '- 更新xxx22\n- 修复xxx22' }],
   // }
-  if (versionInfo.newVersion.version == '0.0.0') {
+  if (failed || !versionInfo.newVersion) {
+    versionInfo.isLatest = false
     versionInfo.isUnknown = true
     versionInfo.status = 'error'
   } else {
     versionInfo.status = 'idle'
     versionInfo.isUnknown = false
-    if (compareVer(versionInfo.version, versionInfo.newVersion.version) != -1) {
-      versionInfo.isLatest = true
-    }
+    versionInfo.isLatest = compareVer(versionInfo.version, versionInfo.newVersion.version) != -1
   }
 
   versionActions.setVersionInfo(versionInfo)
@@ -62,7 +61,7 @@ export const checkUpdate = async() => {
       if (Date.now() - time < 7 * 86400000) return
       saveIgnoreVersionFailTipTime(Date.now())
       toast(global.i18n.t('version_tip_unknown'))
-    } else if (versionInfo.newVersion.version != await getIgnoreVersion()) {
+    } else if (versionInfo.newVersion?.version != await getIgnoreVersion()) {
       showModal()
     }
   }

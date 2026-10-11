@@ -1,7 +1,9 @@
 import { httpGet } from '@/utils/request'
 import { downloadFile, stopDownload, temporaryDirectoryPath } from '@/utils/fs'
 import { getPackageName, getSupportedAbis, installApk } from '@/utils/nativeModules/utils'
-import { LATEST_RELEASE_API_URL, RELEASES_API_URL } from '@/config/release'
+import { RELEASE_MANIFEST_URLS } from '@/config/release'
+import { compareVer } from '@/utils'
+import { getReleaseInfo } from './releaseManifest'
 
 const abis = [
   'arm64-v8a',
@@ -11,46 +13,9 @@ const abis = [
   'universal',
 ]
 
-const request = async(url, retryNum = 0) => {
-  return new Promise((resolve, reject) => {
-    httpGet(url, {
-      timeout: 10000,
-    }, (err, resp, body) => {
-      if (err || resp.statusCode != 200) {
-        ++retryNum >= 3
-          ? reject(err || new Error(resp.statusMessage || resp.statusCode))
-          : request(url, retryNum).then(resolve).catch(reject)
-      } else resolve(body)
-    })
-  })
-}
-
 export const getVersionInfo = async(includePreRelease = false) => {
-  let release
-  if (includePreRelease) {
-    const releases = JSON.parse(await request(RELEASES_API_URL))
-    release = releases.find(item => !item.draft && item.prerelease)
-    // A preview channel with no available preview should still check stable
-    // releases instead of showing an update-check failure.
-    if (!release) release = JSON.parse(await request(LATEST_RELEASE_API_URL))
-  } else {
-    release = JSON.parse(await request(LATEST_RELEASE_API_URL))
-  }
-  if (!release || !Array.isArray(release.assets)) throw new Error('invalid release')
-
-  const assets = release.assets.filter(asset => /-v.*-(?:universal|arm64-v8a|armeabi-v7a|x86_64|x86)\.apk$/.test(asset.name))
-  if (!assets.length) throw new Error('no matching APK asset')
-  const version = release.prerelease
-    ? assets[0].name.match(/-v(\d+\.\d+\.\d+)-/)?.[1]
-    : release.tag_name?.replace(/^v/, '')
-  if (!version) throw new Error('invalid release version')
-
-  return {
-    version,
-    desc: release.body || '',
-    history: [],
-    assets,
-  }
+  return getReleaseInfo(httpGet, RELEASE_MANIFEST_URLS, includePreRelease, compareVer,
+    asset => /-v.*-(?:car-)?(?:universal|arm64-v8a|armeabi-v7a|x86_64|x86)\.apk$/.test(asset.name))
 }
 
 const getTargetAbi = async() => {

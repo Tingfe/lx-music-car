@@ -45,6 +45,9 @@ jobs:
       - name: Upstream music regression checks
         run: npm run test:upstream
 
+      - name: Update information regression checks
+        run: npm run test:update
+
       - name: Build standalone car APK
         shell: bash
         run: |

@@ -1,9 +1,10 @@
 {
   "name": "lx-music-car",
-  "version": "1.8.31",
-  "versionCode": 103,
+  "version": "1.8.32",
+  "versionCode": 104,
   "private": true,
   "scripts": {
+    "test:update": "node --test tests/update-regression.test.cjs",
     "test:upstream": "node --test tests/upstream-regression.test.cjs",
     "test:gd-studio": "node --test tests/gd-studio.test.cjs",
     "test:privacy": "node --test tests/privacy.test.cjs",
